@@ -32,3 +32,25 @@ const renderPreferedEngineIcon = (key) => {
     iconEl.innerHTML = '';
     iconEl.appendChild(icon);
 };
+
+// Embed the svg icon to the page  
+export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  if (withDimensions) {
+    svg.setAttribute("width", "20px");
+    svg.setAttribute("height", "20px");
+  }
+  svg.innerHTML += svgIconContent;
+  btn.appendChild(svg);
+};
+
+// Render the icons in the relevant button
+export const renderIcons = (icons) => {
+  document.querySelectorAll('.icon-btn').forEach((btn) => {
+    const svgIconContent = icons[btn.dataset.icon]?.content;
+    btn.innerHTML = '';
+    buildTheSvgIcon(svgIconContent, btn);
+  });
+};
+

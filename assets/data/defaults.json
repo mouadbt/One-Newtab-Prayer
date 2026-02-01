@@ -31,21 +31,21 @@
     {
       "key": "mistral",
       "label": "Mistral",
-      "active": false,
+      "active": true,
       "preferred": false,
       "url": "https://chat.mistral.ai/chat?q="
     },
     {
       "key": "gemini",
       "label": "Gemini",
-      "active": false,
+      "active": true,
       "preferred": false,
       "url": "https://www.google.com/search?udm=50&q="
     },
     {
       "key": "chatgpt",
       "label": "ChatGPT",
-      "active": false,
+      "active": true,
       "preferred": false,
       "url": "https://chat.openai.com/?q="
     }

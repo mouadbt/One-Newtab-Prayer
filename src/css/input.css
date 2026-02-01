@@ -7,8 +7,136 @@
     --foreground50: oklab(100% 0 0/0.5);
     --foreground75: oklab(100% 0 0/0.75);
     --foreground100: oklab(100% 0 0);
+
+    --space-xs: 1rem;
+    --space-lg: 2.5rem;
+
+    --space-gap: 0.5rem;
+    --space-gap-md: 1rem;
+
+    --font-size-large: 1.5rem;
+    --font-size-base: 1rem;
+
+    --font-family-base: "Courier New", Courier, monospace;
+    --font-family-base: 'CozetteVector';
+
+}
+
+
+@font-face {
+    font-family: 'CozetteVector';
+    src: url('../../assets/fonts/JetBrainsMapleMono-Regular.ttf');
 }
 
 * {
     color: var(--foreground100);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+}
+
+.active-search-container {
+    transform: translateY(-10rem);
+}
+
+.active-search-container .s_container {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.no-suggestioons .s_container{
+    border-bottom-left-radius: var(--radius-3xl);
+    border-bottom-right-radius: var(--radius-3xl);
+}
+
+
+
+/* --------------------------------------- suggestions elements */
+#suggestions-list {
+    width: 100%;
+    background-color: var(--background100);
+    list-style: none;
+    border-bottom-right-radius: var(--radius-3xl);
+    border-bottom-left-radius: var(--radius-3xl);
+}
+
+#suggestions-list:has('.search-result-item') {
+    padding-top: var(--space-lg);
+}
+
+#suggestions-list li {
+    text-align: start;
+}
+
+#suggestions-list a {
+    padding: var(--space-gap-md);
+    text-decoration: none;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    gap: var(--space-gap);
+    justify-content: start;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    font-size: var(--font-size-base);
+}
+
+#suggestions-list li:last-of-type a {
+    border-bottom-right-radius: var(--radius-3xl);
+    border-bottom-left-radius: var(--radius-3xl);
+}
+
+#suggestions-list li:first-of-type a {
+    border-top: 1px solid var(--foreground25);
+}
+
+#suggestions-list a span {
+    color: var(--foreground50);
+}
+
+#suggestions-list a span:last-of-type {
+    opacity: 0;
+    transform: translateX(-200%);
+    transition: all 0.3s ease-in-out;
+    font-size: var(--font-size-large);
+    margin-left: auto;
+    line-height: 0.5;
+    margin-top: -3px;
+}
+
+#suggestions-list a:hover,
+#suggestions-list a:focus {
+    outline: 0;
+    background: var(--foreground25);
+}
+
+#suggestions-list a:hover span:last-of-type,
+#suggestions-list a:focus span:last-of-type {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#suggestions-list a svg {
+    display: none;
+    margin-left: auto;
+    animation: spin 1s infinite linear;
+    width: var(--space-xs);
+    height: var(--space-xs);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#suggestions-list a.loading svg {
+    display: block;
+}
+
+#suggestions-list a.loading span:last-of-type {
+    display: none;
 }
