@@ -353,7 +353,7 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
 }
 
 
-/*                                                */
+/* --------------------------------------- Main widgets */
 .widget {
     clip-path: var(--clip-path-squircle);
 }
@@ -362,11 +362,7 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     background: url('../../assets/images/weather/Afternoon + Storm.jpeg');
     background-size: cover;
     background-position: center;
-    /* backdrop-filter: blur(4px); */
 }
-
-
-
 
 /* --------------------------------------- To do list */
 .task-entry {

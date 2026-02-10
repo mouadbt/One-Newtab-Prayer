@@ -74,10 +74,6 @@ export const setupGlobalListeners = (engines, settings) => {
             performSearch(query, engines);
         };
 
-        if (e.altKey && e.key.toLowerCase() === 's') {
-            togglesettingsPanel(settingsPanel, settingsOverlay, settingsOpenBtn, trigger.condition);
-        };
-
         // Add new task
         if (e.key === 'Enter' && e.target === newTaskInput) {
             handleAddNewTask(newTaskInput);
@@ -99,7 +95,7 @@ export const setupGlobalListeners = (engines, settings) => {
         if (!searchEnginesList.contains(e.target) && !searchEnginesListTrigger.contains(e.target) && !searchEnginesList.classList.contains("hidden")) {
             toggleClassName(searchEnginesList, 'hidden', 1);
         }
-        // unset search container
+        // unset focusing of search container 
         if (!searchContainer.contains(e.target) && !searchEnginesList.classList.contains(focusedSearchContainerClassName)) {
             toggleClassName(searchContainer, focusedSearchContainerClassName, -1);
         }

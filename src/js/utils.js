@@ -24,24 +24,6 @@ export const loadData = (key, defaults) => {
 export const saveData = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 };
-
-// Toggles theme between light and dark mode
-export const switchTheme = (isChecked) => {
-    if (isChecked) {
-        document.body.classList.remove('dark');
-    } else {
-        document.body.classList.add('dark');
-    }
-};
-
-// Focus the cursor on the search input and override the browser's default behavior of focusing the address bar
-export const focusOnSearchInput = (inputEl) => {                   
-    inputEl.focus();
-    if (location.search !== "?focus") {
-        location.search = "?focus";   
-        throw new Error("Redirecting to focus mode");   
-    }              
-};
                                    
 // Toggle classname of the element
 export const toggleClassName = (el, className, addOrRemove) => {
