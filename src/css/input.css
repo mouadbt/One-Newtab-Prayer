@@ -24,8 +24,60 @@
     --font-family-base: "Courier New", Courier, monospace;
     --font-family-base: 'CozetteVector';
 
-    --clip-path-squircle: calc(100% - 29.3483px) 8.5535px, calc(100% - 22.7266px) 12.4338px, calc(100% - 17.1307px) 17.1307px, calc(100% - 12.4338px) 22.7266px, calc(100% - 8.5535px) 29.3483px, calc(100% - 5.4349px) 37.2031px, calc(100% - 3.041px) 46.6584px, calc(100% - 1.3466px) 58.4648px, calc(100% - .3359px) 74.6528px, 100% 120px, 100% calc(100% - 120px), calc(100% - .3359px) calc(100% - 74.6528px), calc(100% - 1.3466px) calc(100% - 58.4648px), calc(100% - 3.041px) calc(100% - 46.6584px), calc(100% - 5.4349px) calc(100% - 37.2031px), calc(100% - 8.5535px) calc(100% - 29.3483px), calc(100% - 12.4338px) calc(100% - 22.7266px), calc(100% - 17.1307px) calc(100% - 17.1307px), calc(100% - 22.7266px) calc(100% - 12.4338px), calc(100% - 29.3483px) calc(100% - 8.5535px), calc(100% - 37.2031px) calc(100% - 5.4349px), calc(100% - 46.6584px) calc(100% - 3.041px), calc(100% - 58.4648px) calc(100% - 1.3466px), calc(100% - 74.6528px) calc(100% - .3359px), calc(100% - 120px) 100%, 120px 100%, 74.6528px calc(100% - .3359px), 58.4648px calc(100% - 1.3466px), 46.6584px calc(100% - 3.041px), 37.2031px calc(100% - 5.4349px), 29.3483px calc(100% - 8.5535px), 22.7266px calc(100% - 12.4338px), 17.1307px calc(100% - 17.1307px), 12.4338px calc(100% - 22.7266px), 8.5535px calc(100% - 29.3483px), 5.4349px calc(100% - 37.2031px), 3.041px calc(100% - 46.6584px), 1.3466px calc(100% - 58.4648px), .3359px calc(100% - 74.6528px), 0px calc(100% - 120px), 0px calc(100% - 120px), 0px calc(92.3077% - 101.5385px), 0px calc(84.6154% - 83.0769px), 0px calc(76.9231% - 64.6154px), 0px calc(69.2308% - 46.1538px), 0px calc(61.5385% - 27.6923px), 0px calc(53.8462% - 9.2308px), 0px calc(46.1538% + 9.2308px), 0px calc(38.4615% + 27.6923px), 0px calc(30.7692% + 46.1538px), 0px calc(23.0769% + 64.6154px), 0px calc(15.3846% + 83.0769px), 0px calc(7.6923% + 101.5385px), 0px 120px;
-
+    --clip-path-squircle: polygon(calc(100% - 29.3483px) 8.5535px,
+            calc(100% - 22.7266px) 12.4338px,
+            calc(100% - 17.1307px) 17.1307px,
+            calc(100% - 12.4338px) 22.7266px,
+            calc(100% - 8.5535px) 29.3483px,
+            calc(100% - 5.4349px) 37.2031px,
+            calc(100% - 3.041px) 46.6584px,
+            calc(100% - 1.3466px) 58.4648px,
+            calc(100% - .3359px) 74.6528px,
+            100% 120px,
+            100% calc(100% - 120px),
+            calc(100% - .3359px) calc(100% - 74.6528px),
+            calc(100% - 1.3466px) calc(100% - 58.4648px),
+            calc(100% - 3.041px) calc(100% - 46.6584px),
+            calc(100% - 5.4349px) calc(100% - 37.2031px),
+            calc(100% - 8.5535px) calc(100% - 29.3483px),
+            calc(100% - 12.4338px) calc(100% - 22.7266px),
+            calc(100% - 17.1307px) calc(100% - 17.1307px),
+            calc(100% - 22.7266px) calc(100% - 12.4338px),
+            calc(100% - 29.3483px) calc(100% - 8.5535px),
+            calc(100% - 37.2031px) calc(100% - 5.4349px),
+            calc(100% - 46.6584px) calc(100% - 3.041px),
+            calc(100% - 58.4648px) calc(100% - 1.3466px),
+            calc(100% - 74.6528px) calc(100% - .3359px),
+            calc(100% - 120px) 100%,
+            120px 100%,
+            74.6528px calc(100% - .3359px),
+            58.4648px calc(100% - 1.3466px),
+            46.6584px calc(100% - 3.041px),
+            37.2031px calc(100% - 5.4349px),
+            29.3483px calc(100% - 8.5535px),
+            22.7266px calc(100% - 12.4338px),
+            17.1307px calc(100% - 17.1307px),
+            12.4338px calc(100% - 22.7266px),
+            8.5535px calc(100% - 29.3483px),
+            5.4349px calc(100% - 37.2031px),
+            3.041px calc(100% - 46.6584px),
+            1.3466px calc(100% - 58.4648px),
+            .3359px calc(100% - 74.6528px),
+            0px calc(100% - 120px),
+            0.3359px 74.6528px,
+            1.3466px 58.4648px,
+            3.041px 46.6584px,
+            5.4349px 37.2031px,
+            8.5535px 29.3483px,
+            12.4338px 22.7266px,
+            17.1307px 17.1307px,
+            22.7266px 12.4338px,
+            29.3483px 8.5535px,
+            37.2031px 5.4349px,
+            46.6584px 3.041px,
+            58.4648px 1.3466px,
+            74.6528px 0.3359px,
+            120px 0px);
 
 }
 
@@ -623,17 +675,17 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     background: transparent;
 }
 
-#task-collection{
+.overflow-y-auto {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
-#task-collection::-webkit-scrollbar {
+.overflow-y-auto::-webkit-scrollbar {
     display: none;
 }
 
 
 
-.leaflet-control-layers-toggle{
+.leaflet-control-layers-toggle {
     background-size: var(--space-xs);
 }

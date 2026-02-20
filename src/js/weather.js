@@ -102,8 +102,7 @@ const updateWeatherBackground = (condition) => {
     const imagePath = `./assets/images/weather/${getTimeOfDay()}_${condition}.jpeg`;
     weatherEl.style.backgroundImage = `url('${imagePath}')`;
 
-    toggleClassName(weatherEl, 'after:bg-blue-400/5!', 'remove');
-    toggleClassName(weatherEl, 'after:bg-black', 'add');
+    toggleClassName(weatherEl, 'after:bg-black!', 'add');
 };
 
 // Get current weather from forecast (first entry or current time)

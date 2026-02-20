@@ -12,33 +12,86 @@
   </head>
   <body class="bg-(--background100)">
     <main
-      class="min-h-screen flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5"
+      class="h-screen overflow-y-auto py-48 flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5"
     >
       <!-- widgets -->
       <section
-        class="w-full max-w-4xl space-y-4 [&_.widget]:px-8 [&_.widget]:rounded-4xl [&_.widget]:after:rounded-4xl [&_.widget]:after:w-full [&_.widget]:after:h-full [&_.widget]:after:absolute [&_.widget]:after:inset-0 [&_.widget]:after:bg-(--background100) [&_.widget]:after:opacity-50 [&_.widget]:**:relative [&_.widget]:**:z-10 [&_.widget]:py-6 [&_.widget]:relative [&_.widget]:[&_h3]:text-xl!"
+        class="w-full max-w-4xl space-y-4 [&_.widget]:px-8 [&_.widget]:rounded-4xl [&_.widget]:after:rounded-4xl [&_.widget]:after:w-full [&_.widget]:after:h-full [&_.widget]:after:absolute [&_.widget]:after:inset-0 [&_.widget]:after:opacity-50 [&_.widget]:**:relative [&_.widget]:**:z-10 [&_.widget]:py-6 [&_.widget]:relative [&_.widget]:[&_h3]:text-xl! [&_.widget]:after:bg-blue-400/5"
       >
+        <!-- Prayers -->
+        <div class="flex items-stretch w-full gap-4">
+          
+          <!-- Timer for the next upcoming prayer -->
+          <div id="next-prayer" class="widget flex flex-col justify-between">
+            <h3>
+              <span id="next-prayer-name" class="text-xl!">---</span>
+            </h3>
+            <div class="flex gap-2 justify-between [&_.time-left]:flex [&_.time-left]:flex-row [&_.time-left]:items-end [&_.time-left]:gap-1 h-full [&_.low-opacity]:opacity-75 mt-3">
+              <div class="time-left mb-auto">
+                <span class="text-2xl! whitespace-nowrap">--</span>
+                <span class="low-opacity">hours</span>
+              </div>
+              <div class="time-left my-auto">
+                <span class="low-opacity">/</span>
+              </div>
+              <div class="time-left">
+                <span class="text-2xl! whitespace-nowrap">--</span>
+                <span class="low-opacity">mins</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Times of the 5 pryaers of the day -->
+          <div id="prayers" class="widget min-h-36 w-full">
+            <h3 class="">Today's Prayers</h3>
+          </div>
+        </div>
         <div class="grid grid-cols-2 grid-rows-2 gap-4 items-stretch">
+          <!-- Weather -->
+          <div
+            id="weather"
+            class="widget flex h-full flex-1 flex-col justify-between row-span-1 relative **:z-20!"
+          >
+            <h2 id="clock" class="text-2xl!">--:--</h2>
+            <div class="flex justify-between gap-2">
+              <span class="flex text-4xl!" id="weather-temp" title="Tempreture"
+                >--°</span
+              >
+              <div class="flex flex-col items-end text-sm">
+                <span id="weather-condition" title="Weather condition"
+                  >-- --</span
+                >
+                <div class="flex gap-3 [&_span]:opacity-75">
+                  <span class="text-sm!" id="weather-humidity" title="Humidity"
+                    >--%</span
+                  ><span class="text-sm!" id="weather-wind" title="Wind"
+                    >-- km/h</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ayah -->
+          <div id="ayah" class="widget row-span-3">
+            <h3 class="">Today's ayah</h3>
+          </div>
+
           <!-- To do tasks -->
           <div
             id="todo"
-            class="widget pb-0! flex flex-col row-span-3 overflow-hidden after:bg-blue-400/5!"
+            class="widget pb-0! flex flex-col row-span-1 overflow-hidden min-h-50"
           >
-            <!-- <img
-              alt=""
-              class="absolute! w-full h-full inset-0 opacity-5 blur-sm"
-              id="todoImage"
-            /> -->
             <h3 class="mb-4">Tasks</h3>
-            <div id="todos-items" class="h-full pb-6">
+            <div id="todos-items" class="h-full pb-16">
               <!-- List of created tasks -->
               <div
-                class="flex flex-col gap-2 max-h-76 overflow-y-auto"
+                class="flex flex-col gap-2 max-h-16 overflow-y-auto"
                 id="task-collection"
               ></div>
               <!-- Input to add new task -->
               <div
-                class="task-input-zone absolute! bottom-6 left-0 w-full pt-2 border-tt border-(--foreground25)"
+                class="task-input-zone absolute! bottom-6 left-0 w-full pt-2"
                 id="task-input-container"
               >
                 <div class="task-ghost-checkbox"></div>
@@ -51,37 +104,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Weather -->
-          <div
-            id="weather"
-            class="widget flex h-full flex-1 flex-col justify-between row-span-1 relative after:bg-blue-400/5! **:z-20!"
-          >
-            <h2 id="clock" class="text-2xl!">--:--</h2>
-            <div class="flex justify-between gap-2">
-              <span class="flex text-4xl!"id="weather-temp" title="Tempreture">--°</span>
-              <div class="flex flex-col items-end text-sm">
-                <span id="weather-condition" title="Weather condition">-- --</span>
-                <div class="flex gap-3">
-                  <span class="text-sm!" id="weather-humidity" title="Humidity">--%</span
-                  ><span class="text-sm!" id="weather-wind" title="Wind">-- km/h</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Ayah -->
-          <div
-            id="ayah"
-            class="widget after:bg-blue-400/5! row-span-1 min-h-48"
-          >
-            <h3 class="">Today's ayah</h3>
-          </div>
-        </div>
-
-        <!-- Prayers -->
-        <div id="prayers" class="widget after:bg-blue-400/5!">
-          <h3 class="">Today's Prayers</h3>
         </div>
       </section>
 
@@ -91,7 +113,7 @@
           id="search-container"
           class="transition-transform duration-500 bg-(--background50) p-1 rounded-4xl w-11/12 max-w-4xl"
         >
-          <div class="bg-(--background100) px-2 rounded-4xl s_container">
+          <div class="bg-(--background100) px-2 rounded-[28px] s_container">
             <input
               type="text"
               id="search-input"
@@ -180,15 +202,7 @@
           <h3>Update Your location</h3>
           <div
             id="map"
-            class="w-full h-72 mt-3 rounded-2xl overflow-hidden relative bg-blue-400/5 after:absolute after:w-full after:h-full after:inset-0 after:content-['If_you_are_seeing_this,_then_you_don\'t_have_internet_access'] after:text-(--foreground50) after:flex after:items-center after:justify-center after:text-center after:rounded-2xl after:p-4 after:z-0 [&_.leaflet-control]:bg-(--background100)! [&_.leaflet-control-zoom-in]:bg-(--background100)! [&_.leaflet-control-zoom-out]:bg-(--background100)! [&_.leaflet-control-layers-selector]:peer [&_.leaflet-control-layers-selector]:hidden 
-            [&_.leaflet-control-layers-selector+span]:w-full
-            [&_.leaflet-control-layers-selector+span]:inline-block
-            [&_.leaflet-control-layers-selector+span]:px-2 
-            [&_.leaflet-control-layers-selector+span]:border-l-2 
-            [&_.leaflet-control-layers-selector+span]:border-(--background100) 
-            [&_.leaflet-control-layers-selector:checked+span]:border-(--background200) 
-            [&_.leaflet-control-layers-selector+span]:transition-colors
-            [&_.leaflet-control-layers-toggle]:w-[30px]! [&_.leaflet-control-layers-toggle]:h-[30px]!"
+            class="w-full h-72 mt-3 rounded-2xl overflow-hidden relative bg-blue-400/5 after:absolute after:w-full after:h-full after:inset-0 after:content-['If_you_are_seeing_this,_then_you_don\'t_have_internet_access'] after:text-(--foreground50) after:flex after:items-center after:justify-center after:text-center after:rounded-2xl after:p-4 after:z-0 [&_.leaflet-control]:bg-(--background100)! [&_.leaflet-control-zoom-in]:bg-(--background100)! [&_.leaflet-control-zoom-out]:bg-(--background100)! [&_.leaflet-control-layers-selector]:peer [&_.leaflet-control-layers-selector]:hidden [&_.leaflet-control-layers-selector+span]:w-full [&_.leaflet-control-layers-selector+span]:inline-block [&_.leaflet-control-layers-selector+span]:px-2 [&_.leaflet-control-layers-selector+span]:border-l-2 [&_.leaflet-control-layers-selector+span]:border-(--background100) [&_.leaflet-control-layers-selector:checked+span]:border-(--background200) [&_.leaflet-control-layers-selector+span]:transition-colors [&_.leaflet-control-layers-toggle]:w-[30px]! [&_.leaflet-control-layers-toggle]:h-[30px]!"
           ></div>
         </div>
       </section>
