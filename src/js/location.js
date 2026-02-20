@@ -117,7 +117,7 @@ export const handleUserLocation = async () => {
     }
 
     // Call the map handling function
-    handleMap(coords);
+    // handleMap(coords);
 
     // Initialize weather logic
     initWeather(coords);
