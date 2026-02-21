@@ -421,7 +421,7 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     display: grid;
     grid-template-columns: 30px auto 30px;
     align-items: center;
-    padding: 8px 0;
+    padding: 0;
     position: relative;
     transition: all 0.3s ease;
 }

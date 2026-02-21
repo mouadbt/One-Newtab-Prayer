@@ -20,7 +20,6 @@ export const applyAllSettings = (settings) => {
 
 // update the new settings applied by user in the localstorage and in the page 
 export const handleSettingChange = (key, isActive, settings) => {
-    console.log(key);
     const option = settings.find(s => s.key === key);
     if (option) {
         option.active = isActive;
