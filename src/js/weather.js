@@ -27,7 +27,7 @@ const WEATHER_CODES = {
     95: { desc: "Thunderstorm", condition: "storm" },
     96: { desc: "Thunderstorm with hail", condition: "storm" },
     99: { desc: "Thunderstorm with heavy hail", condition: "storm" }
-};
+}
 
 // Get time of day to choose correct background image
 const getTimeOfDay = () => {
@@ -36,12 +36,12 @@ const getTimeOfDay = () => {
     if (hour >= 12 && hour < 17) return "afternoon";
     if (hour >= 17 && hour < 20) return "evening";
     return "night";
-};
+}
 
 // Get weather info from weather code
 const getWeatherSummary = (code) => {
-    return WEATHER_CODES[Number(code)] || { desc: "Unknown", condition: "clear" };
-};
+    return WEATHER_CODES[Number(code)] || { desc: "Unknown", condition: "clear" }
+}
 
 // Save forecast data with timestamp
 const saveWeatherData = (forecast) => {
@@ -49,14 +49,14 @@ const saveWeatherData = (forecast) => {
         forecast,
         lastFetched: Date.now()
     });
-};
+}
 
 // Load stored forecast (no time check - just return what we have)
 const getStoredWeatherData = () => {
     const stored = loadData(WEATHER_STORAGE_KEY, null);
     if (!stored) return null;
     return stored.forecast;
-};
+}
 
 // Check if we should fetch new data (6+ hours since last fetch)
 const shouldFetchNewData = () => {
@@ -64,35 +64,35 @@ const shouldFetchNewData = () => {
     if (!stored) return true; // No data, need to fetch
 
     return Date.now() - stored.lastFetched > SIX_HOURS_MS;  
-};
+}
 
 // Update temperature element
 const updateTemperature = (value) => {
     const el = document.querySelector("#weather-temp");
     if (!el || value == null) return;
     el.textContent = `${Math.round(value)}°`;
-};
+}
 
 // Update condition element
 const updateCondition = (desc) => {
     const el = document.querySelector("#weather-condition");
     if (!el) return;
     el.textContent = desc;
-};
+}
 
 // Update humidity element
 const updateHumidity = (value) => {
     const el = document.querySelector("#weather-humidity");
     if (!el || value == null) return;
     el.textContent = `${value}%`;
-};
+}
 
 // Update wind element
 const updateWind = (value) => {
     const el = document.querySelector("#weather-wind");
     if (!el || value == null) return;
     el.textContent = `${value} km/h`;
-};
+}
 
 // Update background image
 const updateWeatherBackground = (condition) => {
@@ -103,7 +103,7 @@ const updateWeatherBackground = (condition) => {
     weatherEl.style.backgroundImage = `url('${imagePath}')`;
 
     toggleClassName(weatherEl, 'after:bg-black!', 'add');
-};
+}
 
 // Get current weather from forecast (first entry or current time)
 export const getCurrentWeather = (forecast) => {
@@ -125,8 +125,8 @@ export const getCurrentWeather = (forecast) => {
         humidity: forecast.relative_humidity_2m[timeIndex],
         wind: forecast.wind_speed_10m[timeIndex],
         code: forecast.weather_code[timeIndex]
-    };
-};
+    }
+}
 
 // Display weather data on UI
 export const displayWeather = (weather) => {
@@ -139,7 +139,7 @@ export const displayWeather = (weather) => {
     updateHumidity(weather.humidity);
     updateWind(weather.wind);
     updateWeatherBackground(weatherInfo.condition);
-};
+}
 
 // Fetch weather from API (3-day forecast, 6h intervals)
 const fetchWeather = async (lat, lon) => {
@@ -160,14 +160,14 @@ const fetchWeather = async (lat, lon) => {
 
     saveWeatherData(data.hourly);
     displayWeather(getCurrentWeather(data.hourly));
-};
+}
 
 // Load backup weather if API fails
 export const loadBackupWeather = () => {
     const stored = getStoredWeatherData();
     if (!stored) return;
     displayWeather(getCurrentWeather(stored));
-};
+}
 
 // Initialize weather logic
 export const initWeather = () => {
@@ -183,4 +183,4 @@ export const initWeather = () => {
         // Use cached data
         loadBackupWeather();
     }
-};
+}

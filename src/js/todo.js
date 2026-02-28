@@ -1,10 +1,10 @@
-import { renderTask, renderTasks } from './ui.js';
+import { renderTask } from './ui.js';
 import { loadData, saveData, toggleClassName } from './utils.js';
 
 // Define the tasks list
 let tasks = [];
 
-export const initTasks = () => {
+export const initTasks = (icons) => {
 
     // get the Todo Items
     tasks = loadData('tasks', [
@@ -15,12 +15,18 @@ export const initTasks = () => {
         }
     ]);
 
+    // Get the delete svg icon
+    const deleteSvgIcon = icons?.close?.content;
+
     // Render TodoItems
-    renderTasks(tasks);
+    tasks.forEach((task) => {
+        renderTask(task, deleteSvgIcon);
+    });
 
     // Initialize tasks events 
     initTaskEvents();
 }
+
 // 
 export const initTaskEvents = () => {
     const taskCollection = document.querySelector('#task-collection');
@@ -67,7 +73,7 @@ const removeTask = (id) => {
     const taskEntry = document.querySelector(`.task-entry[data-id="${id}"]`);
     if (!taskEntry) return;
 
-    toggleClassName(taskEntry,'task-fade-out','add');
+    toggleClassName(taskEntry, 'task-fade-out', 'add');
 
     setTimeout(() => {
         taskEntry.remove();

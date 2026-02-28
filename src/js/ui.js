@@ -37,7 +37,7 @@ export const renderEngines = (engines) => {
 const renderPreferedEngineIcon = (key) => {
   const iconEl = document.querySelector("#searchIcon");
   const icon = document.createElement('img');
-  icon.src = `./assets/images/searchLogos/${key}.webp`;
+  icon.src = `/assets/images/searchLogos/${key}.webp`;
   iconEl.innerHTML = '';
   iconEl.appendChild(icon);
 }
@@ -57,6 +57,7 @@ export const buildTheSvgIcon = (svgIconContent, btn, withDimensions) => {
 // Render the icons in the relevant button
 export const renderIcons = (icons) => {
   document.querySelectorAll('.icon-btn').forEach((btn) => {
+    console.log(btn)
     const svgIconContent = icons[btn.dataset.icon]?.content;
     btn.innerHTML = '';
     buildTheSvgIcon(svgIconContent, btn);
@@ -99,22 +100,41 @@ const createOptionElement = (option, icons, container) => {
 }
 
 // Render TodoLists in page
-export const renderTask = (task) => {
+export const renderTask = (task, svgIconContent) => {
   const taskCollection = document.querySelector("#task-collection");
   const taskDiv = document.createElement('div');
   toggleClassName(taskDiv, 'task-entry', 'add');
   taskDiv.dataset.id = task.id;
-  taskDiv.innerHTML = `
-    <input type="checkbox" class="task-toggle-box" id="${task.id}" ${task.done ? "checked" : ""}>
-    <label for="${task.id}" class="task-text-label" title="Click to set done or undo it">${task.text}</label>
-    <button class="task-remove-action" data-remove="${task.id}" title="Click to remove task" tabindex="-1">×</button>
-  `;
+
+  const inputEl = document.createElement('input');
+  inputEl.type = 'checkbox';
+  inputEl.className = 'task-toggle-box';
+  inputEl.id = task.id;
+  if (task.done) inputEl.checked = true;
+
+  const labelEl = document.createElement('label');
+  labelEl.setAttribute('for', task.id);
+  labelEl.className = 'task-text-label';
+  labelEl.title = 'Click to set done or undo it';
+  labelEl.textContent = task.text;
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'task-remove-action';
+  removeBtn.dataset.icon = 'close';
+  removeBtn.dataset.remove = task.id;
+  removeBtn.title = 'Click to remove task';
+  removeBtn.tabIndex = -1;
+  console.log(svgIconContent)
+  if (svgIconContent) {
+    buildTheSvgIcon(svgIconContent, removeBtn);
+  } else {
+    removeBtn.textContent = '×';
+  }
+
+  taskDiv.appendChild(inputEl);
+  taskDiv.appendChild(labelEl);
+  taskDiv.appendChild(removeBtn);
+
   taskCollection.appendChild(taskDiv);
   return true;
-}
-
-export const renderTasks = (todoItems) => {
-  todoItems.forEach((task) => {
-    renderTask(task)
-  });
 }

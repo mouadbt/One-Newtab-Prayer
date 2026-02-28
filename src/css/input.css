@@ -83,7 +83,7 @@
 
 @font-face {
     font-family: 'CozetteVector';
-    src: url('../../assets/fonts/JetBrainsMapleMono-Regular.ttf');
+    src: url('/assets/fonts/JetBrainsMapleMono-Regular.ttf');
 }
 
 * {
@@ -675,12 +675,14 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     background: transparent;
 }
 
-.overflow-y-auto {
+.overflow-y-auto,
+.overflow-x-auto {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
-.overflow-y-auto::-webkit-scrollbar {
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar {
     display: none;
 }
 

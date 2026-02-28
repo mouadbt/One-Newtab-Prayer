@@ -1,10 +1,30 @@
 {
   "dependencies": {
     "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18"
+    "adhan": "^4.4.3",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.1"
   },
   "scripts": {
     "watch": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --watch",
-    "build": "tailwindcss -i ./src/css/input.css -o ./dist/css/output.css --minify"
-  }
+    "build": "tailwindcss -i ./src/css/input.css -o ./dist/css/output.css --minify",
+    "dev": "vite"
+  },
+  "name": "oneprayertab",
+  "version": "1.0.0",
+  "description": "A minimalist browser extension (Chrome + Firefox) that replaces your new tab page with a clean interface with search functionality, prayer times, weather and more...",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mouadbt/One-Newtab-Prayer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mouadbt/One-Newtab-Prayer/issues"
+  },
+  "homepage": "https://github.com/mouadbt/One-Newtab-Prayer#readme"
 }

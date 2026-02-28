@@ -58,19 +58,19 @@ export const handleMap = (coords) => {
         marker.setLatLng([lat, lng]);
         saveData("location", [lat, lng]);
     });
-};
+}
 
 // Get the user's IP address
 const getUserIpAddress = async () => {
     const ipData = await fetchData('https://api.ipify.org?format=json');
     return ipData;
-};
+}
 
 // Function that gets the location details from an IP address
 const getUserCoordinatesFromIp = async (ip) => {
     const coordsData = await fetchData(`https://api.techniknews.net/ipgeo/${ip}`);
     return coordsData;
-};
+}
 
 const getCoords = async () => {
     const coordsData = await fetchData(`https://ipwho.is/?format=json`);
@@ -125,4 +125,4 @@ export const handleUserLocation = async () => {
 
     // Initialize weather logic
     initPrayers();
-};
+}

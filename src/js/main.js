@@ -1,5 +1,5 @@
 import { fetchData, loadData } from "./utils.js";
-import { renderEngines, renderIcons } from "./ui.js ";
+import { renderEngines, renderIcons } from "./ui.js";
 import { applyAllSettings } from "./settings.js";
 import { setupGlobalListeners } from "./events.js";
 import { initSuggestionsLogic } from "./suggestions.js";
@@ -43,7 +43,7 @@ const init = async () => {
   initSuggestionsLogic();
 
   // Initialize tasks logic
-  initTasks();
+  initTasks(icons);
 
   // load map and handle updating location from map
   handleUserLocation();
