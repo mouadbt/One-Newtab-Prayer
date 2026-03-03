@@ -1,65 +1,70 @@
 import { initPrayers } from './prayers.js';
 import { saveData, fetchData, loadData } from './utils.js';
 import { initWeather } from './weather.js';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+// Fix Leaflet Marker Icons (markers disappear in production builds so this is fix that)
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
 
 // Load the map and show the user's location on the map and let the user update it
-// Load the map and show the user's location on the map and let the user update it
-export const handleMap = (coords) => {
+delete L.Icon.Default.prototype._getIconUrl;
 
-    // Initialize the map and set the initial view using the provided coordinates
-    const map = L.map("map").setView(coords, 6);
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: markerIcon2x,
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+});
 
-    // Create the dark theme tile layer
+let mapInstance = null;
+
+const handleMap = (coords) => {
+
+    // If map already exists, remove it cleanly
+    if (mapInstance) {
+        mapInstance.remove();
+        mapInstance = null;
+    }
+
+    // Create map and store it globally
+    mapInstance = L.map("map").setView(coords, 6);
+
     const darkLayer = L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-        {
-            attribution: "&copy; OpenStreetMap & Carto",
-        }
+        { attribution: "&copy; OpenStreetMap & Carto" }
     );
 
-    // Create the satellite tile layer
     const satelliteLayer = L.tileLayer(
         "https://server.arcgisonline.com/arcgis/rest/services/world_imagery/mapserver/tile/{z}/{y}/{x}",
-        {
-            attribution: "Tiles &copy; Esri",
-        }
+        { attribution: "Tiles &copy; Esri" }
     );
 
-    // Load the previously saved map layer preference from localStorage
     const layer = loadData('mapLayer', null);
 
-    // Add the saved layer if it is satellite, otherwise default to dark layer
-    layer === 'satellite' ? satelliteLayer.addTo(map) : darkLayer.addTo(map);
+    layer === 'satellite'
+        ? satelliteLayer.addTo(mapInstance)
+        : darkLayer.addTo(mapInstance);
 
-    // Add layer switch control to allow the user to change between map styles
-    L.control
-        .layers({
-            "Dark Map": darkLayer,
-            Satellite: satelliteLayer,
-        })
-        .addTo(map);
+    L.control.layers(
+        { "Dark Map": darkLayer, Satellite: satelliteLayer }
+    ).addTo(mapInstance);
 
-    // Listen for base layer changes and save the selected layer to localStorage
-    map.on('baselayerchange', (e) => {
-        if (e.name === 'Satellite') {
-            saveData('mapLayer', 'satellite');
-        } else {
-            saveData('mapLayer', 'dark');
-        }
+    mapInstance.on('baselayerchange', (e) => {
+        saveData('mapLayer', e.name === 'Satellite' ? 'satellite' : 'dark');
     });
 
-    // Create a marker at the initial coordinates
-    let marker = L.marker(coords).addTo(map);
+    let marker = L.marker(coords).addTo(mapInstance);
 
-    // Update marker position and save new location when user clicks on the map
-    map.on("click", (e) => {
+    mapInstance.on("click", (e) => {
         const { lat, lng } = e.latlng;
-
         marker.setLatLng([lat, lng]);
         saveData("location", [lat, lng]);
         initPrayers();
     });
-}
+};
 
 // Get the user's IP address
 const getUserIpAddress = async () => {
@@ -119,11 +124,11 @@ export const handleUserLocation = async (prayerTimesMethods) => {
     }
 
     // Call the map handling function
-    // handleMap(coords);
+    handleMap(coords);
 
     // Initialize weather logic
     initWeather(coords);
 
-    // Initialize weather logic
+    // Initialize prayers logic
     initPrayers(prayerTimesMethods);
 }

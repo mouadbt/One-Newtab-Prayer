@@ -161,12 +161,26 @@ export const renderNextPrayer = (categorizedPrayers) => {
     return;
   }
 
-  const hoursLeft = Math.floor(diff / (1000 * 60 * 60));
-  const minsLeft = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const MS_PER_SECOND = 1000;
+  const SECONDS_PER_MINUTE = 60;
+  const MINUTES_PER_HOUR = 60;
+
+  const MS_PER_MINUTE = MS_PER_SECOND * SECONDS_PER_MINUTE;
+  const MS_PER_HOUR = MS_PER_MINUTE * MINUTES_PER_HOUR;
+
+  // Get the hours left
+  const hoursLeft = Math.floor(diff / MS_PER_HOUR);
+
+  // Get remaining milliseconds after removing hours
+  const remainingMsAfterHours = diff % MS_PER_HOUR;
+
+  // Get remaining minutes
+  const minsLeft = Math.floor(remainingMsAfterHours / MS_PER_MINUTE);
 
   nameEl.textContent = nextPrayer.name;
   hoursEl.textContent = String(hoursLeft);
   minsEl.textContent = String(minsLeft);
+
 }
 
 

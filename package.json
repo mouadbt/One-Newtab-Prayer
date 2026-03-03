@@ -3,6 +3,7 @@
     "@masaajid/prayer-times": "^1.0.1",
     "@tailwindcss/cli": "^4.1.18",
     "adhan": "^4.4.3",
+    "leaflet": "^1.9.4",
     "tailwindcss": "^4.1.18",
     "vite": "^7.3.1"
   },
