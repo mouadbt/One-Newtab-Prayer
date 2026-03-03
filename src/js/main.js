@@ -6,8 +6,8 @@ import { initSuggestionsLogic } from "./suggestions.js";
 import { renderSettings } from "./ui.js";
 import { handleUserLocation } from './location.js';
 import { initTaskEvents, initTasks } from "./todo.js";
-import { initClock } from "./time.js";
-import { initWeather } from './weather.js';
+import { initClock } from "./time.js"; 
+import '../css/style.css';
 const init = async () => {
   // get the default data
   const DEFAULTS = await fetchData("./assets/data/defaults.json");

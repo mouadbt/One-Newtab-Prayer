@@ -71,13 +71,35 @@ const loadStoredPrayers = () => {
     displayPrayers(storedPrayers.prayers);
 }
 
-// Fetch prayers from API (entire month) 
+// Fetch prayers from API (entire month + first day of next month) 
 export const fetchPrayers = async (lat, lon) => {
-    const now = new Date(); const year = now.getFullYear();
-    const month = now.getMonth() + 1; const url = `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lon}`;
-    const data = await fetchData(url);
-    if (!data?.data) { return; }
-    const monthPrayers = extractSotredData(data.data, [lat, lon]);
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+
+    // Current month data
+    const currentMonthUrl = `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lon}`;
+
+    // First day of next month (handle December → January)
+    const nextMonthDate = new Date(year, now.getMonth() + 1, 1);
+    const nextYear = nextMonthDate.getFullYear();
+    const nextMonth = nextMonthDate.getMonth() + 1;
+    const nextMonthUrl = `https://api.aladhan.com/v1/calendar/${nextYear}/${nextMonth}?latitude=${lat}&longitude=${lon}`;
+
+    const [currentData, nextMonthData] = await Promise.all([
+        fetchData(currentMonthUrl),
+        fetchData(nextMonthUrl)
+    ]);
+
+    if (!currentData?.data) { return; }
+
+    // Combine current month with first day of next month (if available)
+    let allDays = currentData.data;
+    if (nextMonthData?.data?.length) {
+        allDays = [...allDays, nextMonthData.data[0]];
+    }
+
+    const monthPrayers = extractSotredData(allDays, [lat, lon]);
     savePrayersData(monthPrayers);
     displayPrayers(monthPrayers.prayers);
 }

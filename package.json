@@ -1,16 +1,13 @@
 {
   "dependencies": {
-    "@masaajid/prayer-times": "^1.0.1",
-    "@tailwindcss/cli": "^4.1.18",
-    "adhan": "^4.4.3",
+    "@tailwindcss/vite": "^4.2.1",
     "leaflet": "^1.9.4",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.2.1",
     "vite": "^7.3.1"
   },
   "scripts": {
-    "watch": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --watch",
-    "build": "tailwindcss -i ./src/css/input.css -o ./dist/css/output.css --minify",
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build"
   },
   "name": "oneprayertab",
   "version": "1.0.0",
