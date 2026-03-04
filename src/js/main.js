@@ -4,10 +4,10 @@ import { applyAllSettings } from "./settings.js";
 import { setupGlobalListeners } from "./events.js";
 import { initSuggestionsLogic } from "./suggestions.js";
 import { renderSettings } from "./ui.js";
-import { handleUserLocation } from './location.js';
-import { initTaskEvents, initTasks } from "./todo.js";
-import { initClock } from "./time.js"; 
-import '../css/style.css';
+import { handleUserLocation } from "./location.js";
+import { initTasks } from "./todo.js";
+import { initClock } from "./time.js";
+import "../css/style.css";
 const init = async () => {
   // get the default data
   const DEFAULTS = await fetchData("./assets/data/defaults.json");
@@ -15,14 +15,14 @@ const init = async () => {
   // Load icons from json file
   const icons = await fetchData("./assets/data/icons.json");
 
-  // const res = await fetchData('105.154.253.15');
-
   // Get the search engines from localstorage or default const
   const engines = loadData("searchEngines", DEFAULTS.searchEngines);
 
   // Get the settings from localstorage or default const
   const settings = loadData("settingsOptions", DEFAULTS.settingsOptions);
-  const renderedSettings = settings.filter((el) => { return el.regular == true });
+  const renderedSettings = settings.filter((el) => {
+    return el.regular == true;
+  });
 
   // Render the icons in the page
   renderIcons(icons);
@@ -50,9 +50,13 @@ const init = async () => {
 
   // Initialize clock logic
   initClock();
-}
+
+  // Remove hidden class from settings panel afetr 500ms
+  setTimeout(() => {
+    document.querySelector("#settings-panel").classList.remove("hidden");
+  }, 500);
+  
+};
 
 // load and execute and start script after page fully load
-document.addEventListener("DOMContentLoaded", () => {
-  init();
-});
+document.addEventListener("DOMContentLoaded", init);

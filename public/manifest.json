@@ -10,11 +10,13 @@
     }
   },
   "chrome_url_overrides": {
-    "newtab": "new_tab.html"
+    "newtab": "/index.html"
   },
   "permissions": [
     "history",
-    "topSites"
+    "topSites",
+    "alarms",
+    "notifications"
   ],
   "icons": {
     "128": "/assets/images/icon128.png"

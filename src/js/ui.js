@@ -138,54 +138,19 @@ export const renderTask = (task, svgIconContent) => {
 }
 
 // Renders the next prayer in #next-prayer: name, hours left, and minutes left
-export const renderNextPrayer = (categorizedPrayers) => {
-  const nextPrayer = categorizedPrayers.find((p) => p.type === "next");
+export const renderNextPrayer = (name, hours, mins) => {
+  console.log(name, hours, mins);
   const nameEl = document.querySelector("#next-prayer-name");
   const hoursEl = document.querySelector("#next-prayer-hours");
   const minsEl = document.querySelector("#next-prayer-mins");
-
-  if (!nextPrayer) {
-    nameEl.textContent = "---";
-    hoursEl.textContent = "--";
-    minsEl.textContent = "--";
-    return;
-  }
-
-  const now = Date.now();
-  const diff = nextPrayer.timestamp - now;
-
-  if (diff <= 0) {
-    nameEl.textContent = "---";
-    hoursEl.textContent = "--";
-    minsEl.textContent = "--";
-    return;
-  }
-
-  const MS_PER_SECOND = 1000;
-  const SECONDS_PER_MINUTE = 60;
-  const MINUTES_PER_HOUR = 60;
-
-  const MS_PER_MINUTE = MS_PER_SECOND * SECONDS_PER_MINUTE;
-  const MS_PER_HOUR = MS_PER_MINUTE * MINUTES_PER_HOUR;
-
-  // Get the hours left
-  const hoursLeft = Math.floor(diff / MS_PER_HOUR);
-
-  // Get remaining milliseconds after removing hours
-  const remainingMsAfterHours = diff % MS_PER_HOUR;
-
-  // Get remaining minutes
-  const minsLeft = Math.floor(remainingMsAfterHours / MS_PER_MINUTE);
-
-  nameEl.textContent = nextPrayer.name;
-  hoursEl.textContent = String(hoursLeft);
-  minsEl.textContent = String(minsLeft);
-
+  nameEl.textContent = name || "---";
+  hoursEl.textContent = hours;
+  minsEl.textContent = mins;
 }
-
 
 // Renders all prayers
 export const renderAllPrayers = (categorizedPrayers) => {
+  console.log(categorizedPrayers);
   const listEl = document.getElementById("prayers-list");
   listEl.innerHTML = "";
 

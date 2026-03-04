@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Prayer tab</title>
+    <script type="module" crossorigin src="/assets/index-BD3ro6Rr.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-ClCrfsg9.css">
+  </head>
+  <body class="bg-(--background100)">
+    <main
+      class="h-screen overflow-y-auto py-48 flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5"
+    >
+      <!-- widgets -->
+      <section
+        class="w-full max-w-4xl space-y-4 [&_.widget]:px-8 [&_.widget]:rounded-4xl [&_.widget]:after:rounded-4xl [&_.widget]:after:w-full [&_.widget]:after:h-full [&_.widget]:after:absolute [&_.widget]:after:inset-0 [&_.widget]:after:opacity-50 [&_.widget]:**:relative [&_.widget]:**:z-10 [&_.widget]:py-6 [&_.widget]:relative [&_.widget]:[&_h3]:text-xl! [&_.widget]:after:bg-blue-400/5"
+      >
+        <!-- Prayers -->
+        <div class="grid grid-cols-12 items-stretch w-full gap-4 max-w-4xl">
+          <!-- Timer for the next upcoming prayer -->
+          <div
+            id="next-prayer"
+            class="col-span-4 widget flex flex-col justify-between [&_.low-opacity]:opacity-75"
+          >
+            <h3>
+              <span class="text-xl! low-opacity">Intel</span>
+              <span id="next-prayer-name" class="text-xl!">---</span>
+            </h3>
+            <div
+              class="flex gap-2 justify-between [&_.time-left]:flex [&_.time-left]:flex-row [&_.time-left]:items-end [&_.time-left]:gap-1 h-full mt-3"
+            >
+              <div class="time-left mb-auto">
+                <span class="text-2xl! whitespace-nowrap" id="next-prayer-hours"
+                  >--</span
+                >
+                <span class="low-opacity">hours</span>
+              </div>
+              <div class="time-left my-auto">
+                <span class="low-opacity">/</span>
+              </div>
+              <div class="time-left">
+                <span class="text-2xl! whitespace-nowrap" id="next-prayer-mins"
+                  >--</span
+                >
+                <span class="low-opacity">mins</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Times of the 5 pryaers of the day -->
+          <div
+            id="prayers"
+            class="widget min-h-36 w-full col-span-8 flex flex-col justify-between"
+          >
+            <h3 class="">Today's Prayers</h3>
+            <ul
+              id="prayers-list"
+              class="w-full flex items-end justify-between relative gap-2 [&_li]:flex [&_li]:flex-col [&_li]:p-2 [&_li]:pb-0 [&_li]:text-center [&_li]:gap-1 [&_.low-opacity]:opacity-75 [&_.passed]:opacity-50"
+            ></ul>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 grid-rows-2 gap-4 items-stretch">
+          <!-- Weather -->
+          <div
+            id="weather"
+            class="widget flex h-full flex-1 flex-col justify-between row-span-1 relative **:z-20!"
+          >
+            <h2 id="clock" class="text-2xl!">--:--</h2>
+            <div class="flex justify-between gap-2">
+              <span class="flex text-4xl!" id="weather-temp" title="Tempreture"
+                >--°</span
+              >
+              <div class="flex flex-col items-end text-sm">
+                <span id="weather-condition" title="Weather condition"
+                  >-- --</span
+                >
+                <div class="flex gap-3 [&_span]:opacity-75">
+                  <span class="text-sm!" id="weather-humidity" title="Humidity"
+                    >--%</span
+                  ><span class="text-sm!" id="weather-wind" title="Wind"
+                    >-- km/h</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ayah -->
+          <div id="ayah" class="widget row-span-3">
+            <h3 class="">Today's ayah</h3>
+          </div>
+
+          <!-- To do tasks -->
+          <div
+            id="todo"
+            class="widget pb-0! flex flex-col row-span-1 overflow-hidden min-h-44"
+          >
+            <h3 class="mb-4">Tasks</h3>
+            <div id="todos-items" class="h-full pb-16">
+              <!-- List of created tasks -->
+              <div
+                class="flex flex-col gap-2 max-h-10 overflow-y-auto"
+                id="task-collection"
+              ></div>
+              <!-- Input to add new task -->
+              <div
+                class="task-input-zone absolute! bottom-6 left-0 w-full pt-2"
+                id="task-input-container"
+              >
+                <div class="task-ghost-checkbox"></div>
+                <input
+                  type="text"
+                  class="task-text-field"
+                  id="nexusTaskNewInput"
+                  placeholder="Add a new task..."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search widget -->
+      <section class="w-full fixed bottom-12 flex justify-center left-0 z-30">
+        <section
+          id="search-container"
+          class="transition-transform duration-500 bg-(--background50) p-1 rounded-4xl w-11/12 max-w-4xl"
+        >
+          <div class="bg-(--background100) px-2 rounded-[28px] s_container">
+            <input
+              type="text"
+              id="search-input"
+              class="w-full outline-0 h-12 pl-3 pt-2"
+              placeholder="/ to start typing"
+            />
+            <!-- Search engines list & submit button -->
+            <div class="flex items-center justify-between p-2">
+              <!-- Search engine Logo & Search engines list -->
+              <div class="w-fit flex gap-4 items-center">
+                <i class="[&_img]:w-4 [&_img]:h-auto" id="searchIcon"></i>
+                <div class="relative">
+                  <button class="btn" id="search-engines-list-trigger">
+                    <span class="text-sm" id="prefered-engine-label"></span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="size-4 rotate-90"
+                    >
+                      <path
+                        d="M8.46967 4.21967C8.17678 4.51256 8.17678 4.98744 8.46967 5.28033L15.1893 12L8.46967 18.7197C8.17678 19.0126 8.17678 19.4874 8.46967 19.7803C8.76256 20.0732 9.23744 20.0732 9.53033 19.7803L16.7803 12.5303C17.0732 12.2374 17.0732 11.7626 16.7803 11.4697L9.53033 4.21967C9.23744 3.92678 8.76256 3.92678 8.46967 4.21967Z"
+                      ></path>
+                    </svg>
+                  </button>
+                  <ul
+                    id="search-engines-list"
+                    class="p-1 absolute -top-1 left-0 -translate-y-full rounded-3xl border border-(--foreground25) bg-(--background100) hidden [&_li]:w-full [&_button]:p-2 [&_button]:rounded-full [&_button]:w-full [&_button]:text-start [&_button]:px-4 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:opacity-50 [&_.active]:opacity-100 [&_button]:focus-visible:opacity-85 [&_button]:hover:opacity-85 [&_.active]:focus-visible:opacity-100"
+                  ></ul>
+                </div>
+              </div>
+              <button
+                id="search-btn"
+                class="icon-btn [&_svg]:w-6 [&_svg]:fill-(--foreground100) rounded-full! max-w-9 p-0! justify-center"
+                data-icon="search"
+                aria-label="Search"
+                title="Click to perform search"
+              ></button>
+            </div>
+          </div>
+          <!-- suggestions -->
+          <ul id="suggestions-list" class=""></ul>
+        </section>
+      </section>
+
+      <!-- settings -->
+      <section class="fixed h-screen right-0 top-0 z-50 pr-4 pt-4 flex gap-4">
+        <!-- Settings panel trigger -->
+        <button
+          id="settings-trigger"
+          class="icon-btn [&_svg]:w-6 w-9 p-0! flex justify-center **:stroke-(--foreground50) hover:**:stroke-(--foreground100)"
+          data-icon="settings"
+          aria-label="settings"
+          title="Click to open settings panel"
+        ></button>
+      </section>
+
+      <!-- settings pnael overlay -->
+      <div
+        id="settings-overlay"
+        class="absolute w-full h-full inset-0 backdrop-blur-xs z-40 hidden"
+        title="Click anywhere to close settings panel"
+      ></div>
+      <section
+        id="settings-panel"
+        class="h-screen overflow-y-auto fixed top-0 right-0 z-50 min-w-sm bg-(--background100) border-l-(--foreground25) border-l p-8 transition-transform duration-500 translate-x-full hidden"
+      >
+        <header class="flex items-center gap-4 justify-between">
+          <h2 class="text-xl!">Settings</h2>
+          <button
+            id="settings-close-btn"
+            tabindex="-1"
+            class="icon-btn [&_svg]:w-6 w-9 p-0! flex items-center justify-center **:stroke-(--foreground50) hover:**:stroke-(--foreground100)"
+            title="Click to close settings panel"
+            data-icon="close"
+          ></button>
+        </header>
+        <ul id="settings-options" class="pt-8"></ul>
+
+        <!-- Map -->
+        <div
+          id="map-container"
+          class="mt-8 [&_.leaflet-control-attribution]:hidden! [&_.leaflet-touch_.leaflet-control-layers]:border-0! [&_.leaflet-touch_.leaflet-bar]:border-0! [&_.leaflet-control-layers_label_span]:text-xs!"
+        >
+          <h3>Update Your location</h3>
+          <div
+            id="map"
+            class="w-full h-72 mt-3 rounded-2xl overflow-hidden relative bg-blue-400/5 after:absolute after:w-full after:h-full after:inset-0 after:content-['If_you_are_seeing_this,_then_you_don\'t_have_internet_access'] after:text-(--foreground50) after:flex after:items-center after:justify-center after:text-center after:rounded-2xl after:p-4 after:z-0 [&_.leaflet-control]:bg-(--background100)! [&_.leaflet-control-zoom-in]:bg-(--background100)! [&_.leaflet-control-zoom-out]:bg-(--background100)! [&_.leaflet-control-layers-selector]:peer [&_.leaflet-control-layers-selector]:hidden [&_.leaflet-control-layers-selector+span]:w-full [&_.leaflet-control-layers-selector+span]:inline-block [&_.leaflet-control-layers-selector+span]:px-2 [&_.leaflet-control-layers-selector+span]:border-l-2 [&_.leaflet-control-layers-selector+span]:border-(--background100) [&_.leaflet-control-layers-selector:checked+span]:border-(--background200) [&_.leaflet-control-layers-selector+span]:transition-colors [&_.leaflet-control-layers-toggle]:w-[30px]! [&_.leaflet-control-layers-toggle]:h-[30px]!"
+          ></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

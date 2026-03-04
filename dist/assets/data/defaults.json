@@ -1,0 +1,344 @@
+{
+  "searchEngines": [
+    {
+      "key": "startpage",
+      "label": "Startpage",
+      "active": true,
+      "preferred": true,
+      "url": "https://www.startpage.com/sp/search?q="
+    },
+    {
+      "key": "google",
+      "label": "Google",
+      "active": true,
+      "preferred": false,
+      "url": "https://www.google.com/search?q="
+    },
+    {
+      "key": "duckduckgo",
+      "label": "DuckDuckGo",
+      "active": true,
+      "preferred": false,
+      "url": "https://duckduckgo.com/?q="
+    },
+    {
+      "key": "perplexity",
+      "label": "Perplexity",
+      "active": true,
+      "preferred": false,
+      "url": "https://www.perplexity.ai/search?q="
+    },
+    {
+      "key": "mistral",
+      "label": "Mistral",
+      "active": true,
+      "preferred": false,
+      "url": "https://chat.mistral.ai/chat?q="
+    },
+    {
+      "key": "gemini",
+      "label": "Gemini",
+      "active": true,
+      "preferred": false,
+      "url": "https://www.google.com/search?udm=50&q="
+    },
+    {
+      "key": "chatgpt",
+      "label": "ChatGPT",
+      "active": true,
+      "preferred": false,
+      "url": "https://chat.openai.com/?q="
+    }
+  ],
+  "settingsOptions": [
+    {
+      "label": "Focus search bar on new tab",
+      "active": true,
+      "key": "focusOnLoad",
+      "regular": true
+    }
+  ],
+  "methods": [
+    {
+      "name": "Muslim World League",
+      "key": "MWL",
+      "is_built_in": true
+    },
+    {
+      "name": "Islamic Society of North America",
+      "key": "ISNA",
+      "is_built_in": true
+    },
+    {
+      "name": "Egyptian General Authority",
+      "key": "EGYPT",
+      "params": {
+        "Fajr": 19.5,
+        "Isha": 17.5
+      },
+      "location": {
+        "latitude": 30.0444196,
+        "longitude": 31.2357116
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Umm Al-Qura University, Makkah",
+      "key": "MAKKAH",
+      "params": {
+        "Fajr": 18.5,
+        "Isha": "90 min"
+      },
+      "location": {
+        "latitude": 21.3890824,
+        "longitude": 39.8579118
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "University of Islamic Sciences, Karachi",
+      "key": "KARACHI",
+      "is_built_in": true
+    },
+    {
+      "name": "Institute of Geophysics, Tehran",
+      "key": "TEHRAN",
+      "params": {
+        "Fajr": 17.7,
+        "Isha": 14,
+        "Maghrib": 4.5,
+        "Midnight": "JAFARI"
+      },
+      "location": {
+        "latitude": 35.6891975,
+        "longitude": 51.3889736
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Shia Ithna-Ashari, Qum",
+      "key": "JAFARI",
+      "params": {
+        "Fajr": 16,
+        "Isha": 14,
+        "Maghrib": 4,
+        "Midnight": "JAFARI"
+      },
+      "location": {
+        "latitude": 34.6415764,
+        "longitude": 50.8746035
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Gulf Region",
+      "key": "GULF",
+      "params": {
+        "Fajr": 19.5,
+        "Isha": "90 min"
+      },
+      "location": {
+        "latitude": 24.1323638,
+        "longitude": 53.3199527
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Kuwait",
+      "key": "KUWAIT",
+      "params": {
+        "Fajr": 18,
+        "Isha": 17.5
+      },
+      "location": {
+        "latitude": 29.375859,
+        "longitude": 47.9774052
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Qatar",
+      "key": "QATAR",
+      "params": {
+        "Fajr": 18,
+        "Isha": "90 min"
+      },
+      "location": {
+        "latitude": 25.2854473,
+        "longitude": 51.5310398
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Majlis Ugama Islam Singapura",
+      "key": "SINGAPORE",
+      "params": {
+        "Fajr": 20,
+        "Isha": 18
+      },
+      "location": {
+        "latitude": 1.352083,
+        "longitude": 103.819836
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Union Organization Islamic de France",
+      "key": "FRANCE12",
+      "params": {
+        "Fajr": 12,
+        "Isha": 12
+      },
+      "location": {
+        "latitude": 48.856614,
+        "longitude": 2.3522219
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Turkey (experimental)",
+      "key": "TURKEY",
+      "params": {
+        "Fajr": 18,
+        "Isha": 17
+      },
+      "location": {
+        "latitude": 39.9333635,
+        "longitude": 32.8597419
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Spiritual Administration of Muslims of Russia",
+      "key": "RUSSIA",
+      "params": {
+        "Fajr": 16,
+        "Isha": 15
+      },
+      "location": {
+        "latitude": 54.734791,
+        "longitude": 55.957856
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Moonsighting Committee Worldwide",
+      "key": "MOONSIGHTING",
+      "params": {
+        "shafaq": "general"
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Dubai (experimental)",
+      "key": "DUBAI",
+      "params": {
+        "Fajr": 18.2,
+        "Isha": 18.2
+      },
+      "location": {
+        "latitude": 25.0762677,
+        "longitude": 55.087404
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Jabatan Kemajuan Islam Malaysia (JAKIM)",
+      "key": "JAKIM",
+      "params": {
+        "Fajr": 20,
+        "Isha": 18
+      },
+      "location": {
+        "latitude": 3.139003,
+        "longitude": 101.686855
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Tunisia",
+      "key": "TUNISIA",
+      "params": {
+        "Fajr": 18,
+        "Isha": 18
+      },
+      "location": {
+        "latitude": 36.8064948,
+        "longitude": 10.1815316
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Algeria",
+      "key": "ALGERIA",
+      "params": {
+        "Fajr": 18,
+        "Isha": 17
+      },
+      "location": {
+        "latitude": 36.753768,
+        "longitude": 3.0587561
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Kementerian Agama Indonesia (KEMENAG)",
+      "key": "KEMENAG",
+      "params": {
+        "Fajr": 20,
+        "Isha": 18
+      },
+      "location": {
+        "latitude": -6.2087634,
+        "longitude": 106.845599
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Morocco",
+      "key": "MOROCCO",
+      "params": {
+        "Fajr": 19,
+        "Isha": 17
+      },
+      "location": {
+        "latitude": 33.9715904,
+        "longitude": -6.8498129
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Comunidade Islamica de Lisboa",
+      "key": "PORTUGAL",
+      "params": {
+        "Fajr": 18,
+        "Maghrib": "3 min",
+        "Isha": "77 min"
+      },
+      "location": {
+        "latitude": 38.7222524,
+        "longitude": -9.1393366
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Ministry of Awqaf, Jordan",
+      "key": "JORDAN",
+      "params": {
+        "Fajr": 18,
+        "Maghrib": "5 min",
+        "Isha": 18
+      },
+      "location": {
+        "latitude": 31.9461222,
+        "longitude": 35.923844
+      },
+      "is_built_in": false
+    },
+    {
+      "name": "Custom",
+      "key": "CUSTOM",
+      "is_built_in": false
+    }
+  ]
+}
