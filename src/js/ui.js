@@ -169,16 +169,10 @@ export const renderAllPrayers = (categorizedPrayers) => {
   });
 }
 
-// Render Ayah Skeleton widget 
-export const renderSkeleton = () => {
-  const ayahContent = document.querySelector("#ayah-content");
-  ayahContent.innerHTML = `
-    <h3>Today's Ayah</h3>
-    <div class="ayah-skeleton ayah-arabic-sk"></div>
-    <div class="ayah-skeleton ayah-tafsir-sk"></div>
-  `;
+export const renderTodayhijri = (todayDateInfo)=>{
+  const todayHijriEl  = document.querySelector("#today-hijri");
+  todayHijriEl.textContent = todayDateInfo?.hijri;
 }
-
 
 export const renderAyah = (ayah) => {
   const ayahInfo = document.querySelector("#ayah-info");

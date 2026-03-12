@@ -1,10 +1,12 @@
-import { renderAllPrayers, renderNextPrayer } from "./ui.js";
+import { renderAllPrayers, renderNextPrayer, renderTodayhijri } from "./ui.js";
 import { fetchData, loadData, saveData } from "./utils.js";
 
 const STORAGE_KEY = "prayers";
 const ALLOWED_PRAYERS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
 let todayPrayers = null;
+
+let todayDateInfo = null;
 
 let midnightTimer = null;
 
@@ -20,7 +22,7 @@ const formatHijri = (date) => {
 };
 
 // extract only the 5 allowed prayers timings from a day
-const extractTimings = day => {
+const extractTimings = (day) => {
   return ALLOWED_PRAYERS.map(name => {
     const timeStr = day.timings?.[name] || "";
     // Remove timezone suffix like " (+00)" - keep only "HH:MM"
@@ -68,7 +70,7 @@ const prepareTodayPrayers = () => {
 
   const today = stored.prayers[idx];
   const tomorrow = stored.prayers[idx + 1] || null;
-
+  todayDateInfo = today
   todayPrayers = [...today.timings];
   // add tomorrow's fajr so the next prayer
   if (tomorrow) todayPrayers.push(tomorrow.timings[0]);
@@ -83,7 +85,7 @@ const parseTime = (timeStr) => {
 // Build a ms timestamp for a prayer time today
 const toTimestamp = (hour, min) => new Date().setHours(hour, min, 0, 0);
 
-// Tomorrow's fajr is the last item — if it already passed today add 24h
+// Add 24h to tomorrow's fajr so it became for tomorow not just like regular 5 today's prayers
 const fixTomorrowFajr = (timestamp, isLast) => {
   if (isLast && timestamp < Date.now()) {
     return timestamp + 24 * 60 * 60 * 1000;
@@ -114,7 +116,7 @@ const categorizePrayers = (prayers) => {
 };
 
 // Get hours and mins remaining until a timestamp
-export const getTimeLeft = (timestamp) => {
+const getTimeLeft = (timestamp) => {
   const diff = timestamp - Date.now();
   if (diff <= 0) return { hours: null, mins: null };
   const hours = Math.floor(diff / 3600000);
@@ -148,8 +150,13 @@ const dailySetup = () => {
   if (!todayPrayers) return;
 
   const categorized = categorizePrayers(todayPrayers);
+
   renderAllPrayers(categorized);
   scheduleAlarms(categorized);
+
+  if (todayDateInfo) {
+    renderTodayhijri(todayDateInfo)
+  };
 
   const next = categorized.find((p) => p.type === "next");
   if (next) {
@@ -163,7 +170,6 @@ const dailySetup = () => {
   };
   midnightTimer = setTimeout(dailySetup, msUntilMidnight());
 };
-
 
 // Re-categorize from cache and update ui countdown
 const minuteUpdate = () => {
@@ -179,14 +185,13 @@ const minuteUpdate = () => {
   renderNextPrayer(next.name, hours, mins);
 };
 
-
 // Build api url for a given month
 const buildApiEndpoint = (year, month, lat, lon) => {
   return `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lon}`;
 };
 
 // Fetch current month + first day of next month then save and refresh ui
-export const fetchPrayers = async (lat, lon) => {
+const fetchPrayers = async (lat, lon) => {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;

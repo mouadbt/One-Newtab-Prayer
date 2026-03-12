@@ -7,7 +7,7 @@
   </head>
   <body class="bg-(--background100)">
     <main
-      class="h-screen overflow-y-auto py-48 flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5"
+      class="h-screen overflow-y-auto py-48 flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5 [&_.low-opacity]:opacity-75"
     >
       <!-- widgets -->
       <section
@@ -17,7 +17,7 @@
         <div class="grid grid-cols-12 items-stretch w-full gap-4">
           <div
             id="next-prayer"
-            class="col-span-4 widget flex flex-col justify-between [&_.low-opacity]:opacity-75"
+            class="col-span-4 widget flex flex-col justify-between"
           >
             <h3>
               <span class="text-xl! low-opacity">Intel</span>
@@ -49,10 +49,13 @@
             id="prayers"
             class="widget min-h-36 w-full col-span-8 flex flex-col justify-between"
           >
-            <h3 class="">Today's Prayers</h3>
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="">Today's Prayers</h3>
+              <span id="today-hijri" class="translate-y-0.5 low-opacity"></span>
+            </div>
             <ul
               id="prayers-list"
-              class="w-full flex items-end justify-between relative gap-2 [&_li]:flex [&_li]:flex-col [&_li]:p-2 [&_li]:pb-0 [&_li]:text-center [&_li]:gap-1 [&_.low-opacity]:opacity-75 [&_.passed]:opacity-50 [&_.next]:border-l-2 [&_.next]:border-(--foreground50) [&_.next]:p-0 [&_.next]:pl-2"
+              class="w-full flex items-end justify-between relative gap-2 [&_li]:flex [&_li]:flex-col [&_li]:p-2 [&_li]:pb-0 [&_li]:text-center [&_li]:gap-1 [&_.passed]:opacity-50 [&_.next]:border-l-2 [&_.next]:border-(--foreground50) [&_.next]:p-0 [&_.next]:pl-2"
             ></ul>
           </div>
         </div>
@@ -71,10 +74,10 @@
                 <span id="weather-condition" title="Weather condition"
                   >-- --</span
                 >
-                <div class="flex gap-3 [&_span]:opacity-75">
-                  <span class="text-sm!" id="weather-humidity" title="Humidity"
+                <div class="flex gap-3">
+                  <span class="text-sm! low-opacity" id="weather-humidity" title="Humidity"
                     >--%</span
-                  ><span class="text-sm!" id="weather-wind" title="Wind"
+                  ><span class="text-sm! low-opacity" id="weather-wind" title="Wind"
                     >-- km/h</span
                   >
                 </div>
@@ -83,27 +86,49 @@
           </div>
 
           <!-- Ayah -->
-          <div id="ayah" class="group widget row-span-3 relative p-0! overflow-hidden [&_.low-opacity]:opacity-75">
+          <div
+            id="ayah"
+            class="group widget row-span-3 relative p-0! overflow-hidden flex flex-col"
+          >
             <img
               id="ayah-img"
-              class="absolute! w-full h-full inset-0 blur-lg z-0! brightness-30 "
+              class="absolute! w-full h-full inset-0 blur-lg z-0! brightness-30"
             />
             <div id="ayah-content-container" class="px-8 py-6">
               <div class="flex items-center justify-between gap-4">
                 <h3 class="">Today's ayah</h3>
                 <span id="ayah-info" class="translate-y-0.5 low-opacity"></span>
               </div>
-              <div id="cover-container" class=" items-center justify-center scale-40 -translate-y-8 -mb-22 hidden!">
+              <div
+                id="cover-container"
+                class="items-center justify-center scale-40 -translate-y-8 -mb-22 hidden!"
+              >
+                <button id="prev" data-icon="prev" data-ayah-action="prev-ayah" tabindex="-1">
+                  p
+                </button>
                 <div
                   class="group-hover:scale-110 transition-transform duration-150 widget w-48 h-48"
                   id="ayah-cover"
                   title="Click to play resitation"
                 ></div>
+                <button id="next"  data-icon="next" data-ayah-action="next-ayah" tabindex="-1">
+                  n
+                </button>
               </div>
             </div>
-            <div id="ayah-content" class="w-full max-h-50 overflow-y-auto px-8 pb-6">
-              <h4 id="ayah-value" class="text-center text-base! z-20! relative select-text!" dir="rtl"></h4>
-              <h5 id="ayah-tafsir" class="text-sm! text-center mt-2 low-opacity z-20! relative select-text!"></h5>
+            <div
+              id="ayah-content"
+              class="w-full max-h-50 overflow-y-auto px-8 pb-6 my-auto"
+            >
+              <h4
+                id="ayah-value"
+                class="text-center text-base! z-20! relative select-text!"
+                dir="rtl"
+              ></h4>
+              <h5
+                id="ayah-tafsir"
+                class="text-sm! text-center mt-2 low-opacity z-20! relative select-text!"
+              ></h5>
             </div>
           </div>
 
@@ -116,7 +141,7 @@
             <div id="todos-items" class="h-full pb-16">
               <!-- List of created tasks -->
               <div
-                class="flex flex-col gap-2 max-h-10 overflow-y-auto"
+                class="flex flex-col gap-2 max-h-10 overflow-y-auto [&_.task-remove-action]:hover:opacity-100!"
                 id="task-collection"
               ></div>
               <!-- Input to add new task -->

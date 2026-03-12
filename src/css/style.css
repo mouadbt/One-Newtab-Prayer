@@ -545,7 +545,7 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
 }
 
 .task-entry:hover .task-remove-action {
-    opacity: 1;
+    opacity: .75;
     transform: translateY(0);
 }
 

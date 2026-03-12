@@ -84,7 +84,7 @@ const getCoords = async () => {
     return coordsData;
 }
 
-export const handleUserLocation = async (prayerTimesMethods) => {
+export const handleUserLocation = async () => {
 
     // Get the coords from localStorage
     let coords = loadData('location', null);
@@ -125,11 +125,11 @@ export const handleUserLocation = async (prayerTimesMethods) => {
     }
 
     // Call the map handling function
-    handleMap(coords);
+    // handleMap(coords);
 
     // Initialize weather logic
-    initWeather();
+    // initWeather();
 
     // Initialize prayers logic
-    initPrayers(prayerTimesMethods);
+    initPrayers();
 }

@@ -4,6 +4,7 @@ import { saveData } from './utils.js';
 import { renderEngines } from './ui.js';
 import { handleSettingChange } from './settings.js';
 import { handleAddNewTask } from './todo.js';
+import { navigateBetweenVerses } from './ayah.js';
 
 export const setupGlobalListeners = (engines, settings) => {
     const searchEnginesListTrigger = document.querySelector('#search-engines-list-trigger');
@@ -17,6 +18,7 @@ export const setupGlobalListeners = (engines, settings) => {
     const settingsPanel = document.querySelector("#settings-panel");
     const settingsOverlay = document.querySelector("#settings-overlay");
     const settingsCloseBtn = document.querySelector("#settings-close-btn");
+    const ayahControlesContainer = document.querySelector("#cover-container");
     const settingsPanelTriggers = [
         {
             el: settingsOpenBtn,
@@ -111,7 +113,7 @@ export const setupGlobalListeners = (engines, settings) => {
     suggestionsList.addEventListener("click", (e) => {
         const link = e.target.closest(".suggestion-link");
         if (!link) return;
-        toggleClassName(link,'loading','add');
+        toggleClassName(link, 'loading', 'add');
     });
 
     // Handle setttings panel appearing
@@ -146,6 +148,14 @@ export const setupGlobalListeners = (engines, settings) => {
                 callback(input.id, input.checked, store);
             }
         });
+    });
+
+    // Move to  next Ayah
+    ayahControlesContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest("[data-ayah-action]");
+        if (!btn) return;
+        const action = btn.dataset.ayahAction
+        navigateBetweenVerses(action);
     });
 }
 
@@ -215,6 +225,6 @@ const handleEngineSelect = (key, engines, parent, input) => {
     renderEngines(updated);
 
     // hide the list and focus again on the triger
-    toggleClassName(parent,'hidden','add');
+    toggleClassName(parent, 'hidden', 'add');
     input.focus();
 }

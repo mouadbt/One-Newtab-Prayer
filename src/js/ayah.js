@@ -1,43 +1,39 @@
-import { renderAyah, renderSkeleton } from "./ui";
+import { renderAyah } from "./ui";
 import { loadData, saveData, toggleClassName } from "./utils";
 
-// ─── Constants ───────────────────────────────────────────────────────────────
-const QUORAN_STORAGE_KEY = "quoran_data";          // full quran data cache
-const AYAH_DAILY_KEY = "ayah_daily";          // today's ayah index + timestamp
+const QURAN_STORAGE_KEY = "quran_data";          // full quran data cache
+const AYAH_DAILY_KEY = "ayah_daily";             // today's ayah index + timestamp
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-const AUDIO_BASE_ENDPOINT = "https://cdn.islamic.network/quran/audio/128/ar.husarymujawwad/";
-const QURAN_API_ENDPOINT = "https://api.alquran.cloud/v1/quran/quran-uthmani";
-const TAFSIR_API_ENDPOINT = "https://api.alquran.cloud/v1/quran/ar.muyassar";
+const AUDIO_BASE_URL = "https://cdn.islamic.network/quran/audio/128/ar.husarymujawwad/";
+const QURAN_API_URL = "https://api.alquran.cloud/v1/quran/quran-uthmani";
+const TAFSIR_API_URL = "https://api.alquran.cloud/v1/quran/ar.muyassar";
 
-// ─── State ───────────────────────────────────────────────────────────────────
-let ayahData = [];   // [{arabic, tafsir, number}]  – full quran
-let currentIndex = 0;    // index inside ayahData
-let dailyIndex = 0;    // today's random starting index
-let audio = null; // Audio instance
-let nextAudio = null; // preloaded next ayah
+let ayahData = [];        // [{arabic, tafsir, number}] – full quran
+let currentIndex = 0;     // index inside ayahData (daily ayah)
+let audio = null;         // Audio instance
+let nextAudio = null;     // preloaded next ayah
 let isPlaying = false;
 
 export async function initAyah() {
-
-  // Load the quoran and versers data 
+  // Load the quran and verses data
   await loadQuranData();
 
   // Get today's random ayah
   loadDailyAyah();
 
   // Render the ayah in the ui
-  const ayah = ayahData[currentIndex];
-  if (!ayah) return;
-  renderAyah(ayah);
+  // const ayah = ayahData[currentIndex];
+  // if (!ayah) return;
+  // renderAyah(ayah);
+  displayeAyah();
 
-  bindControls(); 
+  bindControls();
   // preloadAudio(currentIndex);
 }
 
-async function loadQuranData() {
-
+const loadQuranData = async () => {
   // Get stored data
-  const storedAyat = loadData(QUORAN_STORAGE_KEY, null)
+  const storedAyat = loadData(QURAN_STORAGE_KEY, null);
   if (storedAyat) {
     ayahData = storedAyat;
     return;
@@ -46,30 +42,29 @@ async function loadQuranData() {
   // Get data from api
   const { quranJson, tafsirJson } = await fetchVerses();
 
-  // Format Verses Data
-  ayahData = formatVersers(quranJson, tafsirJson);
+  // Format verses data
+  ayahData = formatVerses(quranJson, tafsirJson);
 
-  // Save Versers to sotrage
-  saveData(QUORAN_STORAGE_KEY, ayahData);
+  // Save verses to storage
+  saveData(QURAN_STORAGE_KEY, ayahData);
 }
 
 const fetchVerses = async () => {
-
-  const [quranRes, tafsirAllRes] = await Promise.all([
-    fetch(QURAN_API_ENDPOINT),
-    fetch(TAFSIR_API_ENDPOINT),
+  const [quranRes, tafsirRes] = await Promise.all([
+    fetch(QURAN_API_URL),
+    fetch(TAFSIR_API_URL),
   ]);
 
   const quranJson = await quranRes.json();
-  const tafsirJson = await tafsirAllRes.json();
+  const tafsirJson = await tafsirRes.json();
   return { quranJson, tafsirJson };
 }
 
-const formatVersers = (quranJson, tafsirJson) => {
-  const arabicVerses = quranJson.data.surahs.flatMap(s =>
-    s.ayahs.map(a => ({ ...a, surahName: s.name, surahEn: s.englishName }))
+const formatVerses = (quranJson, tafsirJson) => {
+  const arabicVerses = quranJson.data.surahs.flatMap(surah =>
+    surah.ayahs.map(ayah => ({ ...ayah, surahName: surah.name, surahEn: surah.englishName }))
   );
-  const tafsirVerses = tafsirJson.data.surahs.flatMap(s => s.ayahs);
+  const tafsirVerses = tafsirJson.data.surahs.flatMap(surah => surah.ayahs);
 
   return arabicVerses.map((v, i) => ({
     number: v.numberInSurah,
@@ -81,46 +76,52 @@ const formatVersers = (quranJson, tafsirJson) => {
   }));
 }
 
-function loadDailyAyah() {
+const loadDailyAyah = () => {
   const raw = loadData(AYAH_DAILY_KEY, null);
   if (raw) {
-    // We alreayd 
     const { index, timestamp } = raw;
     if (Date.now() - timestamp < ONE_DAY_MS) {
-      dailyIndex = index;
       currentIndex = index;
       return;
     }
   }
 
   // pick new random ayah
-  dailyIndex = Math.floor(Math.random() * ayahData.length);
-  currentIndex = dailyIndex;
-  localStorage.setItem(AYAH_DAILY_KEY, JSON.stringify({ index: dailyIndex, timestamp: Date.now() }));
+  currentIndex = Math.floor(Math.random() * ayahData.length);
+  saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
+}
+
+const displayeAyah = () => {
+  const ayah = ayahData[currentIndex];
+  if (!ayah) return;
+  renderAyah(ayah);
 }
 
 // ─── Controls ────────────────────────────────────────────────────────────────
-function bindControls() {
+const bindControls = () => {
   const coverContainer = document.querySelector('#cover-container');
   toggleClassName(coverContainer, 'hidden!', 'remove');
   toggleClassName(coverContainer, 'flex', 'add');
 
-  // document.getElementById("ayah-prev").addEventListener("click", onPrev);
-  // document.getElementById("ayah-next").addEventListener("click", onNext);
   // document.getElementById("ayah-play").addEventListener("click", onPlayToggle);
-  // document.getElementById("ayah-copy").addEventListener("click", onCopy);
+}
+
+export const navigateBetweenVerses = (action) => {
+  if (!action) return;
+  stopAudio();
+  if (action === 'next-ayah') {
+    currentIndex = (currentIndex + 1) % ayahData.length;
+  } else if (action === 'prev-ayah') {
+    currentIndex = (currentIndex - 1 + ayahData.length) % ayahData.length;
+  }
+  displayeAyah();
+  saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
 }
 
 function onPrev() {
-  stopAudio();
-  currentIndex = (currentIndex - 1 + ayahData.length) % ayahData.length;
-  renderAyah();
 }
 
 function onNext() {
-  stopAudio();
-  currentIndex = (currentIndex + 1) % ayahData.length;
-  renderAyah();
 }
 
 function onPlayToggle() {
@@ -145,7 +146,7 @@ function onCopy() {
 // ─── Audio ───────────────────────────────────────────────────────────────────
 function audioUrl(index) {
   const globalNum = ayahData[index]?.global ?? index + 1;
-  return `${AUDIO_BASE_ENDPOINT}${globalNum}.mp3`;
+  return `${AUDIO_BASE_URL}${globalNum}.mp3`;
 }
 
 function preloadAudio(index) {

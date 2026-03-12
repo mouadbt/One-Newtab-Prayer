@@ -2,7 +2,7 @@ import { fetchData, loadData, saveData, toggleClassName } from './utils.js';
 
 const WEATHER_STORAGE_KEY = 'weatherForecast';
 const ONE_HOUR_MS = 60 * 60 * 1000;
-
+const logs = [];
 // Weather codes map
 const WEATHER_CODES = {
     0: { desc: "Clear sky", condition: "clear" },
@@ -104,27 +104,22 @@ const updateWind = (value) => {
 const updateWeatherBackground = (condition) => {
     const weatherEl = document.querySelector("#weather");
     const ayahImgEl = document.querySelector("#ayah-img");
-    const ayahEl = document.querySelector("#ayah");
     const ayahCoverEl = document.querySelector("#ayah-cover");
-    const bgElements = [weatherEl, ayahEl, ayahCoverEl];
+    const bgElements = [weatherEl, ayahCoverEl];
     if (!weatherEl) return;
 
     const imagePath = `./assets/images/weather/${getTimeOfDay()}_${condition}.jpeg`;
     if (ayahImgEl) ayahImgEl.src = imagePath;
-    weatherEl.style.backgroundImage = `url('${imagePath}')`;
-    ayahCoverEl.style.backgroundImage = `url('${imagePath}')`;
+    bgElements.forEach(element => {
+        if (element) {
+            element.style.backgroundImage = `url('${imagePath}')`;
+        }
+    });
     toggleClassName(weatherEl, 'after:bg-black!', 'add');
-    // bgElements.forEach((el) => {
-    //     if (el) {
-    //         el.style.backgroundImage = `url('${imagePath}')`
-    //         toggleClassName(el, 'after:bg-black!', 'add');
-    //     }
-    // });
-
 }
 
 // Get current weather from forecast (first entry or current time)
-export const getCurrentWeather = (forecast) => {
+const getCurrentWeather = (forecast) => {
     if (!forecast) return null;
 
     const now = new Date();
@@ -147,7 +142,7 @@ export const getCurrentWeather = (forecast) => {
 }
 
 // Display weather data on UI
-export const displayWeather = (weather) => {
+const displayWeather = (weather) => {
     if (!weather) return;
 
     const weatherInfo = getWeatherSummary(weather.code);
@@ -159,7 +154,7 @@ export const displayWeather = (weather) => {
     updateWeatherBackground(weatherInfo.condition);
 }
 
-// Fetch weather from API (3-day forecast, 6h intervals)
+// Fetch weather from API (3-day forecast, 1h intervals)
 const fetchWeather = async (lat, lon) => {
     const url =
         `https://api.open-meteo.com/v1/forecast` +
@@ -181,7 +176,7 @@ const fetchWeather = async (lat, lon) => {
 }
 
 // Load backup weather if API fails
-export const loadBackupWeather = () => {
+const loadBackupWeather = () => {
     const stored = getStoredWeatherData();
     if (!stored) return;
     displayWeather(getCurrentWeather(stored));
