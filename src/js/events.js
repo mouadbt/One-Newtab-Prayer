@@ -4,7 +4,7 @@ import { saveData } from './utils.js';
 import { renderEngines } from './ui.js';
 import { handleSettingChange } from './settings.js';
 import { handleAddNewTask } from './todo.js';
-import { navigateBetweenVerses } from './ayah.js';
+import { navigateBetweenVerses, onPlayToggle } from './ayah.js';
 
 export const setupGlobalListeners = (engines, settings) => {
     const searchEnginesListTrigger = document.querySelector('#search-engines-list-trigger');
@@ -156,6 +156,11 @@ export const setupGlobalListeners = (engines, settings) => {
         if (!btn) return;
         const action = btn.dataset.ayahAction
         navigateBetweenVerses(action);
+    });
+    ayahControlesContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest("#toggle-ayah-playing");
+        if (!btn) return;
+        onPlayToggle();
     });
 }
 

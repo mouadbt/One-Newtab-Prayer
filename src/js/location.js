@@ -128,7 +128,7 @@ export const handleUserLocation = async () => {
     // handleMap(coords);
 
     // Initialize weather logic
-    // initWeather();
+    initWeather();
 
     // Initialize prayers logic
     initPrayers();

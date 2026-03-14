@@ -113,14 +113,75 @@ export const navigateBetweenVerses = (action) => {
   saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
 }
 
-// function onPlayToggle() {
-//   if (isPlaying) {
-//     stopAudio();
-//     setPlayIcon(false);
-//   } else {
-//     playAyah(currentIndex);
-//   }
-// }
+export const onPlayToggle = () => {
+  if (isPlaying) {
+    stopAudio();
+    setPlayIcon("idle");
+  } else {
+    setPlayIcon("loading");
+    playAyah(currentIndex);
+  }
+}
+
+const stopAudio = () => {
+  if (audio) {
+    audio.pause();
+    audio.onended = null;
+  }
+  isPlaying = false;
+}
+
+const playAyah = (index) => {
+  if (!audio || audio.src !== new URL(audioUrl(index), location.href).href) {
+    audio = new Audio(audioUrl(index));
+    audio.preload = "auto";
+  }
+
+  audio.play().then(() => {
+    isPlaying = true;
+    setPlayIcon("playing");
+  }).catch(err => {
+    console.warn("[Ayah] play error", err);
+    setPlayIcon("idle");
+  });
+
+  audio.onended = () => {
+    const nextIdx = (index + 1) % ayahData.length;
+    currentIndex = nextIdx;
+    displayeAyah();
+    setPlayIcon("loading");
+    audio = new Audio(audioUrl(nextIdx));
+    audio.play().then(() => {
+      isPlaying = true;
+      setPlayIcon("playing");
+    }).catch(err => {
+      console.warn("[Ayah] auto-play error", err);
+      setPlayIcon("idle");
+    });
+    audio.onended = () => playAyah((currentIndex + 1) % ayahData.length);
+  };
+};
+
+const audioUrl = (index) => {
+  const globalNum = ayahData[index]?.global ?? index + 1;
+  return `${AUDIO_BASE_URL}${globalNum}.mp3`;
+}
+
+
+export const setPlayIcon = (state) => {
+  const icons = {
+    idle: document.getElementById("icon-play"),
+    loading: document.getElementById("icon-loading"),
+    playing: document.getElementById("icon-playing"),
+  };
+
+  Object.values(icons).forEach(el => {
+    el.classList.remove("icon-active")
+    el.classList.add("icon-not-active")
+  });
+  icons[state].classList.add("icon-active");
+  icons[state].classList.remove("icon-not-active");
+};
 
 // // ─── Audio ───────────────────────────────────────────────────────────────────
 // function audioUrl(index) {
@@ -171,14 +232,6 @@ export const navigateBetweenVerses = (action) => {
 
 //     audio.onended = () => playAyah((currentIndex + 1) % ayahData.length);
 //   };
-// }
-
-// function stopAudio() {
-//   if (audio) {
-//     audio.pause();
-//     audio.onended = null;
-//   }
-//   isPlaying = false;
 // }
 
 // function setPlayIcon(playing) {

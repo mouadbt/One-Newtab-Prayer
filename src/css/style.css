@@ -691,3 +691,48 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
 .leaflet-control-layers-toggle {
     background-size: var(--space-xs);
 }
+
+
+/* #toggle-ayah-playing {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+} */
+
+#toggle-ayah-playing svg {
+    position: absolute;
+    /* inset: 0; */
+    /* width: 100%; */
+    /* height: 100%; */
+    transform: scale(0.7);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.icon-not-active{
+    opacity: 0;
+}
+
+/* active icon */
+#toggle-ayah-playing svg.icon-active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* spinner only spins when active */
+#icon-loading.icon-active {
+    animation: ayah-spin 1s linear infinite;
+}
+
+@keyframes ayah-spin {
+    to {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+.animate-spin {
+    transform-origin: center center;
+}

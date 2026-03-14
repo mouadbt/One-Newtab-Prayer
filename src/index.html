@@ -107,32 +107,148 @@
               </div>
               <div
                 id="cover-container"
-                class="items-center justify-center scale-40 -translate-y-8 -mb-22 hidden!"
+                class="items-center justify-center scale-40 -translate-y-8 -mb-22 hidden! [&_button]:w-24 [&_button]:h-24! [&_button]:flex [&_button]:items-center [&_button]:justify-center [&_button]:rounded-full"
               >
                 <button
                   id="prev"
                   data-icon="prev"
                   data-ayah-action="prev-ayah"
+                  class="-translate-x-20"
                 >
-                  p
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    stroke="#ffffff"
+                  >
+                    <g stroke-width="0"></g>
+                    <g stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g>
+                      <path
+                        d="M13.5 9L10.5 12L13.5 15"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      ></path>
+                    </g>
+                  </svg>
                 </button>
                 <div
-                  class="group-hover:scale-110 transition-transform duration-150 widget w-48 h-48"
+                  class="group-hover:scale-110 transition-transform duration-150 widget w-48 h-48 [&_svg]:w-24 flex items-center justify-center"
                   id="ayah-cover"
                   title="Click to play resitation"
-                ></div>
+                >
+                  <button id="toggle-ayah-playing">
+                    <!-- Play -->
+                    <svg
+                      id="icon-play"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="#ffffff"
+                    >
+                      <g stroke-width="0"></g>
+                      <g stroke-linecap="round" stroke-linejoin="round"></g>
+                      <g>
+                        <path
+                          d="M3 12L3 18.9671C3 21.2763 5.53435 22.736 7.59662 21.6145L10.7996 19.8727M3 8L3 5.0329C3 2.72368 5.53435 1.26402 7.59661 2.38548L20.4086 9.35258C22.5305 10.5065 22.5305 13.4935 20.4086 14.6474L14.0026 18.131"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+
+                    <!-- Pause -->
+                    <svg
+                      id="icon-playing"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="#ffffff"
+                      class="opacity-0"
+                    >
+                      <g stroke-width="0"></g>
+                      <g stroke-linecap="round" stroke-linejoin="round"></g>
+                      <g>
+                        <path
+                          d="M2 18C2 19.8856 2 20.8284 2.58579 21.4142C3.17157 22 4.11438 22 6 22C7.88562 22 8.82843 22 9.41421 21.4142C10 20.8284 10 19.8856 10 18V6C10 4.11438 10 3.17157 9.41421 2.58579C8.82843 2 7.88562 2 6 2C4.11438 2 3.17157 2 2.58579 2.58579C2 3.17157 2 4.11438 2 6V14"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        ></path>
+                        <path
+                          d="M22 6C22 4.11438 22 3.17157 21.4142 2.58579C20.8284 2 19.8856 2 18 2C16.1144 2 15.1716 2 14.5858 2.58579C14 3.17157 14 4.11438 14 6V18C14 19.8856 14 20.8284 14.5858 21.4142C15.1716 22 16.1144 22 18 22C19.8856 22 20.8284 22 21.4142 21.4142C22 20.8284 22 19.8856 22 18V10"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+
+                    <!-- Loading -->
+                    <svg
+                      id="icon-loading"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      stroke="#ffffff"
+                      class="opacity-0"
+                    >
+                      <g stroke-width="0"></g>
+                      <g stroke-linecap="round" stroke-linejoin="round"></g>
+                      <g>
+                        <path
+                          d="M13.8876 9.9348C14.9625 10.8117 15.5 11.2501 15.5 12C15.5 12.7499 14.9625 13.1883 13.8876 14.0652C13.5909 14.3073 13.2966 14.5352 13.0261 14.7251C12.7888 14.8917 12.5201 15.064 12.2419 15.2332C11.1695 15.8853 10.6333 16.2114 10.1524 15.8504C9.6715 15.4894 9.62779 14.7336 9.54038 13.2222C9.51566 12.7947 9.5 12.3757 9.5 12C9.5 11.6243 9.51566 11.2053 9.54038 10.7778C9.62779 9.26636 9.6715 8.51061 10.1524 8.1496C10.6333 7.78859 11.1695 8.11466 12.2419 8.76679C12.5201 8.93597 12.7888 9.10831 13.0261 9.27492C13.2966 9.46483 13.5909 9.69274 13.8876 9.9348Z"
+                          stroke-width="1.5"
+                        ></path>
+                        <path
+                          d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                        ></path>
+                      </g>
+                    </svg>
+                  </button>
+                </div>
                 <button
                   id="next"
                   data-icon="next"
                   data-ayah-action="next-ayah"
+                  class="translate-x-20"
                 >
-                  n
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    stroke="#ffffff"
+                    transform="rotate(180)"
+                  >
+                    <g stroke-width="0"></g>
+                    <g stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g>
+                      <path
+                        d="M13.5 9L10.5 12L13.5 15"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      ></path>
+                    </g>
+                  </svg>
                 </button>
               </div>
             </div>
             <div
               id="ayah-content"
               class="w-full max-h-50 overflow-y-auto px-8 pb-6 my-auto"
+              tabindex="-1"
             >
               <h4
                 id="ayah-value"
