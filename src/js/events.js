@@ -150,6 +150,27 @@ export const setupGlobalListeners = (engines, settings) => {
         });
     });
 
+    // handle reciter selection change
+    const recitersList = document.querySelector("#reciters-list");
+    if (recitersList) {
+        recitersList.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT' && e.target.name === 'reciter') {
+                saveData('selectedReciter', e.target.id);
+            }
+        });
+        recitersList.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const input = e.target.querySelector('input');
+                if (input && input.name === 'reciter') {
+                    // uncheck all other reciters
+                    recitersList.querySelectorAll('input[name="reciter"]').forEach(r => r.checked = false);
+                    input.checked = true;
+                    saveData('selectedReciter', input.id);
+                }
+            }
+        });
+    }
+
     // Move to  next Ayah
     ayahControlesContainer.addEventListener('click', (e) => {
         const btn = e.target.closest("[data-ayah-action]");

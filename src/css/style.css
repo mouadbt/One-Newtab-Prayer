@@ -346,7 +346,8 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     list-style: none;
 }
 
-#settings-panel #settings-options input {
+#settings-panel #settings-options input,
+#settings-panel #reciters-list input {
     display: none;
 }
 
@@ -365,13 +366,15 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     width: 100%;
 }
 
-#settings-panel .check {
+#settings-panel .check,
+#settings-panel #reciters-list .check {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-#settings-panel .check svg {
+#settings-panel .check svg,
+#settings-panel #reciters-list .check svg {
     stroke: var(--foreground100);
     stroke-width: 1.5;
 }
@@ -393,14 +396,20 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
     transition: stroke-dashoffset 0.2s linear;
 }
 
-#settings-panel input:checked+label .check svg path {
+#settings-panel #settings-options input:checked+label .check svg path,
+#settings-panel #reciters-list input:checked+label .check svg path {
     stroke-dashoffset: 60;
     transition-delay: 0s;
 }
 
-#settings-panel input:checked+label .check svg polyline {
+#settings-panel #settings-options input:checked+label .check svg polyline,
+#settings-panel #reciters-list input:checked+label .check svg polyline {
     stroke-dashoffset: 42;
     transition-delay: 0.2s;
+}
+
+#settings-panel #reciters-list input:not(:checked)+label .check svg polyline {
+    stroke-dashoffset: 66;
 }
 
 
@@ -693,21 +702,9 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
 }
 
 
-/* #toggle-ayah-playing {
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-} */
 
 #toggle-ayah-playing svg {
     position: absolute;
-    /* inset: 0; */
-    /* width: 100%; */
-    /* height: 100%; */
     transform: scale(0.7);
     transition: opacity 0.25s ease, transform 0.25s ease;
 }
@@ -720,19 +717,4 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
 #toggle-ayah-playing svg.icon-active {
     opacity: 1;
     transform: scale(1);
-}
-
-/* spinner only spins when active */
-#icon-loading.icon-active {
-    animation: ayah-spin 1s linear infinite;
-}
-
-@keyframes ayah-spin {
-    to {
-        transform: rotate(360deg) scale(1);
-    }
-}
-
-.animate-spin {
-    transform-origin: center center;
 }

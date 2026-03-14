@@ -1,17 +1,16 @@
-import { renderAyah } from "./ui";
+import { renderAyah, showPlayingAyahError } from "./ui";
 import { loadData, saveData, toggleClassName } from "./utils";
 
 const QURAN_STORAGE_KEY = "quran_data";          // full quran data cache
 const AYAH_DAILY_KEY = "ayah_daily";             // today's ayah index + timestamp
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-const AUDIO_BASE_URL = "https://cdn.islamic.network/quran/audio/128/ar.husarymujawwad/";
 const QURAN_API_URL = "https://api.alquran.cloud/v1/quran/quran-uthmani";
 const TAFSIR_API_URL = "https://api.alquran.cloud/v1/quran/ar.muyassar";
+const AUDIO_BASE_URL = "https://cdn.islamic.network/quran/audio/128/";
 
 let ayahData = [];        // [{arabic, tafsir, number}] – full quran
 let currentIndex = 0;     // index inside ayahData (daily ayah)
 let audio = null;         // Audio instance
-let nextAudio = null;     // preloaded next ayah
 let isPlaying = false;
 
 export async function initAyah() {
@@ -103,7 +102,6 @@ const bindControls = () => {
 
 export const navigateBetweenVerses = (action) => {
   if (!action) return;
-  stopAudio();
   if (action === 'next-ayah') {
     currentIndex = (currentIndex + 1) % ayahData.length;
   } else if (action === 'prev-ayah') {
@@ -111,145 +109,58 @@ export const navigateBetweenVerses = (action) => {
   }
   displayeAyah();
   saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
+  if (isPlaying) {
+    playAyah();
+  }
 }
 
 export const onPlayToggle = () => {
   if (isPlaying) {
     stopAudio();
-    setPlayIcon("idle");
   } else {
-    setPlayIcon("loading");
-    playAyah(currentIndex);
+    playAyah();
   }
 }
 
 const stopAudio = () => {
   if (audio) {
     audio.pause();
-    audio.onended = null;
   }
   isPlaying = false;
 }
 
-const playAyah = (index) => {
-  if (!audio || audio.src !== new URL(audioUrl(index), location.href).href) {
-    audio = new Audio(audioUrl(index));
-    audio.preload = "auto";
+const getSelectedReciter = () => {
+  return loadData('selectedReciter', 'ar.husarymujawwad');
+}
+
+const audioUrl = (index) => {
+  const globalNum = ayahData[index]?.global ?? index + 1;
+  const reciter = getSelectedReciter();
+  return `${AUDIO_BASE_URL}${reciter}/${globalNum}.mp3`;
+}
+
+const playAyah = () => {
+  const url = audioUrl(currentIndex);
+
+  if (!audio) {
+    audio = new Audio(url);
+    audio.onended = () => {
+      const nextIdx = (currentIndex + 1) % ayahData.length;
+      currentIndex = nextIdx;
+      displayeAyah();
+      saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
+      playAyah();
+    };
+  } else {
+    audio.src = url;
+    audio.load();
   }
 
   audio.play().then(() => {
     isPlaying = true;
-    setPlayIcon("playing");
   }).catch(err => {
+    isPlaying = false;
+    showPlayingAyahError();
     console.warn("[Ayah] play error", err);
-    setPlayIcon("idle");
   });
-
-  audio.onended = () => {
-    const nextIdx = (index + 1) % ayahData.length;
-    currentIndex = nextIdx;
-    displayeAyah();
-    setPlayIcon("loading");
-    audio = new Audio(audioUrl(nextIdx));
-    audio.play().then(() => {
-      isPlaying = true;
-      setPlayIcon("playing");
-    }).catch(err => {
-      console.warn("[Ayah] auto-play error", err);
-      setPlayIcon("idle");
-    });
-    audio.onended = () => playAyah((currentIndex + 1) % ayahData.length);
-  };
-};
-
-const audioUrl = (index) => {
-  const globalNum = ayahData[index]?.global ?? index + 1;
-  return `${AUDIO_BASE_URL}${globalNum}.mp3`;
-}
-
-
-export const setPlayIcon = (state) => {
-  const icons = {
-    idle: document.getElementById("icon-play"),
-    loading: document.getElementById("icon-loading"),
-    playing: document.getElementById("icon-playing"),
-  };
-
-  Object.values(icons).forEach(el => {
-    el.classList.remove("icon-active")
-    el.classList.add("icon-not-active")
-  });
-  icons[state].classList.add("icon-active");
-  icons[state].classList.remove("icon-not-active");
-};
-
-// // ─── Audio ───────────────────────────────────────────────────────────────────
-// function audioUrl(index) {
-//   const globalNum = ayahData[index]?.global ?? index + 1;
-//   return `${AUDIO_BASE_URL}${globalNum}.mp3`;
-// }
-
-// function preloadAudio(index) {
-//   // preload current + next
-//   const cur = new Audio(audioUrl(index));
-//   const next = new Audio(audioUrl((index + 1) % ayahData.length));
-//   cur.preload = "auto";
-//   next.preload = "auto";
-//   audio = cur;
-//   nextAudio = next;
-// }
-
-// function playAyah(index) {
-//   if (!audio || audio.src !== new URL(audioUrl(index), location.href).href) {
-//     audio = new Audio(audioUrl(index));
-//     audio.preload = "auto";
-//   }
-
-//   // preload next right away
-//   const nextIdx = (index + 1) % ayahData.length;
-//   nextAudio = new Audio(audioUrl(nextIdx));
-//   nextAudio.preload = "auto";
-
-//   audio.play().then(() => {
-//     isPlaying = true;
-//     setPlayIcon(true);
-//   }).catch(err => console.warn("[Ayah] play error", err));
-
-//   audio.onended = () => {
-//     // auto-advance
-//     currentIndex = nextIdx;
-//     renderAyah();       // re-renders and rebinds; audio swapped inside
-//     // use preloaded next audio
-//     audio = nextAudio;
-//     const afterNext = (nextIdx + 1) % ayahData.length;
-//     nextAudio = new Audio(audioUrl(afterNext));
-//     nextAudio.preload = "auto";
-
-//     audio.play().then(() => {
-//       isPlaying = true;
-//       setPlayIcon(true);
-//     }).catch(err => console.warn("[Ayah] auto-play error", err));
-
-//     audio.onended = () => playAyah((currentIndex + 1) % ayahData.length);
-//   };
-// }
-
-// function setPlayIcon(playing) {
-//   const btn = document.getElementById("ayah-play");
-//   if (!btn) return;
-//   btn.innerHTML = playing ? svgStop() : svgPlay();
-//   btn.title = playing ? "Stop Recitation" : "Play Recitation";
-// }
-
-// // ─── SVG Icons ───────────────────────────────────────────────────────────────
-// function svgPlay() {
-//   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-//     <path d="M8 5v14l11-7z"/>
-//   </svg>`;
-// }
-
-// function svgStop() {
-//   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-//     <rect x="6" y="6" width="12" height="12" rx="1"/>
-//   </svg>`;
-// }
+};  

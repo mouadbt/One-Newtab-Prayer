@@ -25,6 +25,9 @@ const init = async () => {
     return el.regular == true;
   });
 
+  // Get the reciters from default const
+  const reciters = DEFAULTS.reciters;
+
   // Render the icons in the page
   renderIcons(icons);
 
@@ -32,7 +35,7 @@ const init = async () => {
   renderEngines(engines);
 
   //  Render the settings in the page
-  renderSettings(renderedSettings, engines, icons);
+  renderSettings(renderedSettings, engines, icons, reciters);
 
   // Apply settings to the page element
   applyAllSettings(settings);
