@@ -289,5 +289,5 @@ export const showPlayingAyahError = () => {
 };
 
 const removeElement = (el) => {
-  if (el) document.body.removeChild(el);
+  el?.remove();
 }
