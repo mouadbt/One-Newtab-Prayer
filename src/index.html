@@ -7,7 +7,7 @@
   </head>
   <body class="bg-(--background100)">
     <main
-      class="h-screen overflow-y-auto py-48 flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5 [&_.low-opacity]:opacity-75"
+      class="h-screen overflow-y-auto py-48 flex items-center justify-center max-w-7xl mx-auto [&_button]:flex [&_button]:gap-1 [&_button]:items-center [&_.btn]:border [&_button]:border-(--foreground25) [&_button]:text-sm [&_button]:min-h-9 [&_button]:min-w-9 [&_.btn]:py-1 [&_button]:outline-offset-1 [&_button]:focus-visible:outline-2 [&_button]:focus-visible:outline-(--foreground50) [&_button]:h-9 [&_button]:select-none [&_button]:rounded-2xl [&_button]:px-2.5 [&_.low-opacity]:opacity-75 [&_summary]:rounded-2xl [&_summary]:outline-offset-1 [&_summary]:focus-visible:outline-2 [&_summary]:focus-visible:outline-(--foreground50) [&_summary]:min-h-9"
     >
       <!-- widgets -->
       <section
@@ -94,7 +94,7 @@
           <!-- Ayah -->
           <div
             id="ayah"
-            class="group widget row-span-3 relative p-0! overflow-hidden flex flex-col [&_.ayah-controls]:transition-all [&_.ayah-controls]:opacity-0 [&_.ayah-controls]:scale-50 hover:[&_.ayah-controls]:opacity-100 hover:[&_.ayah-controls]:scale-100"
+            class="group widget row-span-2 relative p-0! overflow-hidden flex flex-col [&_.ayah-controls]:transition-all [&_.ayah-controls]:opacity-0 [&_.ayah-controls]:scale-50 hover:[&_.ayah-controls]:opacity-100 hover:[&_.ayah-controls]:scale-100"
           >
             <img
               id="ayah-img"
@@ -107,18 +107,22 @@
               </div>
               <div
                 id="cover-container"
-                class="items-center justify-center scale-40 -translate-y-8 -mb-22 hidden! [&_button]:w-24 [&_button]:h-24! [&_button]:flex [&_button]:items-center [&_button]:justify-center [&_button]:rounded-full"
+                class="items-center justify-center scale-40 -translate-y-8 -mb-22 hidden! [&_button]:w-24 [&_button]:h-24! [&_button]:flex [&_button]:items-center [&_button]:justify-center [&_button]:rounded-full relative [&_button]:relative [&_button]:z-10"
               >
+                <div
+                  class="bars-container absolute! w-full flex items-center justify-center gap-1 h-[60px] scale-[300%] z-0 [&_.bar]:w-1  [&_.bar]:rounded-4xl"
+                  id="bars"
+                ></div>
                 <button
                   id="prev"
                   data-icon="next-prev3"
                   data-ayah-action="prev-ayah"
-                  class="-translate-x-20 [&_svg]:rotate-180 ayah-controls"
+                  class="-translate-x-50 [&_svg]:rotate-180 ayah-controls"
                   title="Move to previous ayah"
                   tabindex="-1"
                 ></button>
                 <div
-                  class="group-hover:scale-110 focus-within:scale-110 transition-transform duration-150 widget w-48 h-48 [&_svg]:w-22 flex items-center justify-center"
+                  class="group-hover:scale-110 focus-within:scale-110 transition-transform duration-150 widget w-48 h-48 [&_svg]:w-22 flex items-center justify-center relative z-10"
                   id="ayah-cover"
                   title="Play recitation"
                 >
@@ -147,13 +151,14 @@
                 <button
                   id="next"
                   data-ayah-action="next-ayah"
-                  class="translate-x-20 ayah-controls"
+                  class="translate-x-50 ayah-controls"
                   data-icon="next-prev3"
                   title="Move to next ayah"
                   tabindex="-1"
                 ></button>
               </div>
             </div>
+
             <div
               id="ayah-content"
               class="w-full max-h-50 overflow-y-auto px-8 pb-6 my-auto"
@@ -273,7 +278,7 @@
       ></div>
       <section
         id="settings-panel"
-        class="h-screen overflow-y-auto fixed top-0 right-0 z-50 min-w-sm bg-(--background100) border-l-(--foreground25) border-l p-8 transition-transform duration-500 translate-x-full hidden"
+        class="h-screen overflow-y-auto fixed top-0 right-0 z-50 min-w-sm bg-(--background100) border-l-(--foreground25) border-l p-8 transition-transform duration-500 translate-x-full hidden [&_summary_svg]:w-5 [&_summary_svg]:h-5 [&_summary_svg]:transition-transform [&_summary_svg]:duration-300 [&_summary_svg]:group-open:rotate-180 [&_summary_.down-arrow]:w-6 [&_h3]:text-lg! [&_h3]:pl-1 [&_summary_svg]:stroke-current"
       >
         <header class="flex items-center gap-4 justify-between">
           <h2 class="text-xl!">Settings</h2>
@@ -288,8 +293,16 @@
         <ul id="settings-options" class="pt-8"></ul>
 
         <!-- Reciters section -->
-        <div class="mt-8 max-w-md">
-          <h3>Reciter</h3>
+        <details
+          class="group w-md transition mt-8"
+          id="reciters-list-container"
+        >
+          <summary
+            class="flex items-center justify-between cursor-pointer list-none"
+          >
+            <h3>Reciter</h3>
+            <span class="down-arrow" data-icon="down-arrow"> </span>
+          </summary>
           <ul
             id="reciters-list"
             class="max-h-64 overflow-y-auto space-y-2 mt-3 min-h-1 min-w-full w-full p-1"
@@ -299,19 +312,24 @@
             Audio may not be available for some reciters, try selecting a
             different reciter to check if the ayah plays successfully.
           </small>
-        </div>
+        </details>
 
         <!-- Map section -->
-        <div
+        <details
           id="map-container"
-          class="mt-8 [&_.leaflet-control-attribution]:hidden! [&_.leaflet-touch_.leaflet-control-layers]:border-0! [&_.leaflet-touch_.leaflet-bar]:border-0! [&_.leaflet-control-layers_label_span]:text-xs!"
+          class="group w-full max-w-md transition mt-8 [&_.leaflet-control-attribution]:hidden! [&_.leaflet-touch_.leaflet-control-layers]:border-0! [&_.leaflet-touch_.leaflet-bar]:border-0! [&_.leaflet-control-layers_label_span]:text-xs!"
         >
-          <h3>Update Your location</h3>
+          <summary
+            class="flex items-center justify-between cursor-pointer list-none"
+          >
+            <h3>Update Your location</h3>
+            <span class="down-arrow" data-icon="down-arrow"> </span>
+          </summary>
           <div
             id="map"
             class="w-full h-72 mt-3 rounded-2xl overflow-hidden relative bg-blue-400/5 after:absolute after:w-full after:h-full after:inset-0 after:content-['If_you_are_seeing_this,_then_you_don\'t_have_internet_access'] after:text-(--foreground50) after:flex after:items-center after:justify-center after:text-center after:rounded-2xl after:p-4 after:z-0 [&_.leaflet-control]:bg-(--background100)! [&_.leaflet-control-zoom-in]:bg-(--background100)! [&_.leaflet-control-zoom-out]:bg-(--background100)! [&_.leaflet-control-layers-selector]:peer [&_.leaflet-control-layers-selector]:hidden [&_.leaflet-control-layers-selector+span]:w-full [&_.leaflet-control-layers-selector+span]:inline-block [&_.leaflet-control-layers-selector+span]:px-2 [&_.leaflet-control-layers-selector+span]:border-l-2 [&_.leaflet-control-layers-selector+span]:border-(--background100) [&_.leaflet-control-layers-selector:checked+span]:border-(--background200) [&_.leaflet-control-layers-selector+span]:transition-colors [&_.leaflet-control-layers-toggle]:w-[30px]! [&_.leaflet-control-layers-toggle]:h-[30px]!"
           ></div>
-        </div>
+        </details>
       </section>
     </main>
     <script type="module" src="./js/main.js"></script>

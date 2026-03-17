@@ -726,6 +726,38 @@ body.dark .sunMoonThemeToggleBtn svg .sunRay {
 }
 
 
+.bar {
+    background: var(--foreground100);
+    animation: grow var(--dur) ease-in-out infinite alternate;
+    animation-delay: var(--delay);
+    animation-play-state: paused;
+}
+
+@keyframes grow {
+    0% {
+        transform: scaleY(0.1);
+        opacity: 0.45;
+    }
+    100% {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+.bars-container {
+    transition: opacity .5s ease;
+    opacity: 0 !important;
+}
+
+.bars-container.visible{
+    opacity: 1 !important;
+}
+
+.bars-container.play .bar {
+    animation-play-state: running;
+}
+
+
 /* --------------------------------------- Reciters long Names horizontal scroll  */
 .scrolledReciterName span {
     white-space: nowrap;

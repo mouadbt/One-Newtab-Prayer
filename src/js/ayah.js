@@ -1,52 +1,67 @@
 import { renderAyah, showPlayingAyahError } from "./ui";
 import { loadData, saveData, toggleClassName } from "./utils";
 
-const QURAN_STORAGE_KEY = "quran_data";          // full quran data cache
-const AYAH_DAILY_KEY = "ayah_daily";             // today's ayah index + timestamp
+const QURAN_STORAGE_KEY = "quran_data";
+const AYAH_DAILY_KEY = "ayah_daily";
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const QURAN_API_URL = "https://api.alquran.cloud/v1/quran/quran-uthmani";
 const TAFSIR_API_URL = "https://api.alquran.cloud/v1/quran/ar.muyassar";
 const AUDIO_BASE_URL = "https://cdn.islamic.network/quran/audio/128/";
 
-let ayahData = [];        // [{arabic, tafsir, number}] – full quran
-let currentIndex = 0;     // index inside ayahData (daily ayah)
-let audio = null;         // Audio instance
+let ayahData = [];
+let currentIndex = 0;
+let audio = null;
 let isPlaying = false;
-let isLoading = false;    // loading/buffering state
+let isLoading = false;
+
+
+const initBars = () => {
+  const container = document.getElementById('bars');
+  if (!container) return;
+
+  const heights = [22, 36, 52, 60, 48, 56, 44, 58, 38, 52, 46, 60, 36, 50, 42, 58, 34, 52, 48, 60, 40, 54, 44, 56, 38];
+  const durations = [0.6, 0.9, 0.7, 1.1, 0.8, 0.65, 1.0, 0.75, 0.85, 0.7, 0.95, 0.8, 0.6, 1.05, 0.9, 0.7, 0.85, 0.65, 1.0, 0.75, 0.8, 0.7, 0.9, 0.65, 1.1];
+  const delays = [0, .1, .2, .05, .15, .25, .08, .18, .28, .03, .13, .23, .07, .17, .27, .04, .14, .24, .09, .19, .12, .22, .06, .16, .26];
+
+  heights.forEach((h, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = h + 'px';
+    bar.style.setProperty('--dur', durations[i] + 's');
+    bar.style.setProperty('--delay', delays[i] + 's');
+    container.appendChild(bar);
+  });
+}
+
+
+const updateBars = () => {
+  const container = document.getElementById('bars');
+  if (!container) return;
+  container.classList.toggle('play', isPlaying);
+  if (!isPlaying) {
+    container.classList.remove('visible');
+  } else {
+    setTimeout(() => container.classList.add('visible'), 250);
+  }
+}
 
 export async function initAyah() {
-  // Load the quran and verses data
   await loadQuranData();
-
-  // Get today's random ayah
   loadDailyAyah();
-
-  // Render the ayah in the ui
   displayeAyah();
-
   bindControls();
-
-  // Initialize the play icon
   updateAyahPlayingIcon();
-
-  // preloadAudio(currentIndex);
+  initBars();
 }
 
 const loadQuranData = async () => {
-  // Get stored data
   const storedAyat = loadData(QURAN_STORAGE_KEY, null);
   if (storedAyat) {
     ayahData = storedAyat;
     return;
   }
-
-  // Get data from api
   const { quranJson, tafsirJson } = await fetchVerses();
-
-  // Format verses data
   ayahData = formatVerses(quranJson, tafsirJson);
-
-  // Save verses to storage
   saveData(QURAN_STORAGE_KEY, ayahData);
 }
 
@@ -55,7 +70,6 @@ const fetchVerses = async () => {
     fetch(QURAN_API_URL),
     fetch(TAFSIR_API_URL),
   ]);
-
   const quranJson = await quranRes.json();
   const tafsirJson = await tafsirRes.json();
   return { quranJson, tafsirJson };
@@ -86,8 +100,6 @@ const loadDailyAyah = () => {
       return;
     }
   }
-
-  // pick new random ayah
   currentIndex = Math.floor(Math.random() * ayahData.length);
   saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
 }
@@ -105,7 +117,9 @@ const bindControls = () => {
 }
 
 export const navigateBetweenVerses = (action) => {
-  if (!action) return;
+  if (!action) {
+    return
+  };
   if (action === 'next-ayah') {
     currentIndex = (currentIndex + 1) % ayahData.length;
   } else if (action === 'prev-ayah') {
@@ -135,16 +149,14 @@ const updateAyahPlayingIcon = () => {
 
   if (!playIcon || !pauseIcon || !loadingIcon) return;
 
-  // Reset all icons to not-active
   [playIcon, pauseIcon, loadingIcon].forEach(icon => {
     icon.classList.remove('icon-active');
     icon.classList.add('icon-not-active');
   });
 
-  // Activate the appropriate icon based on state
   const activeIcon = isLoading ? loadingIcon
     : isPlaying ? pauseIcon
-    : playIcon;
+      : playIcon;
 
   activeIcon.classList.remove('icon-not-active');
   activeIcon.classList.add('icon-active');
@@ -159,24 +171,24 @@ export const onPlayToggle = () => {
 }
 
 const stopAudio = () => {
-  if (audio) {
-    audio.pause();
-  }
+  if (audio) audio.pause();
   isPlaying = false;
   updateAyahPlayingIcon();
+  updateBars();
 }
 
 const playAyah = () => {
   const url = audioUrl(currentIndex);
 
   isLoading = true;
+  isPlaying = false;
   updateAyahPlayingIcon();
+  updateBars();
 
   if (!audio) {
     audio = new Audio(url);
     audio.onended = () => {
-      const nextIdx = (currentIndex + 1) % ayahData.length;
-      currentIndex = nextIdx;
+      currentIndex = (currentIndex + 1) % ayahData.length;
       displayeAyah();
       saveData(AYAH_DAILY_KEY, { index: currentIndex, timestamp: Date.now() });
       playAyah();
@@ -190,13 +202,14 @@ const playAyah = () => {
     isLoading = false;
     isPlaying = true;
     updateAyahPlayingIcon();
+    updateBars();
   };
 
-  audio.play().then(() => {
-  }).catch(err => {
+  audio.play().catch(err => {
     isLoading = false;
     isPlaying = false;
     updateAyahPlayingIcon();
+    updateBars();
     showPlayingAyahError();
     console.warn("[Ayah] play error", err);
   });
