@@ -1,31 +1,28 @@
-const browserApi = typeof chrome !== "undefined" ? chrome : browser;
+const browserApi = chrome;
 
-let athanAudio = null;
-let ringAudio = null;
+let currentAudio = null;
 
-browserApi.runtime.onMessage.addListener((msg, sendResponse) => {
+const playAudio = (file) => {
+  // Stop any playabale audio and start from 0
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
 
-  if (msg.type === "PLAY_ATHAN") {
-    // stop any current athan before starting new one
-    if (athanAudio) { athanAudio.pause(); athanAudio.currentTime = 0; }
-    athanAudio = new Audio(browserApi.runtime.getURL("assets/audio/islam-subhi.m4a"));
-    athanAudio.onended = () => { athanAudio = null; }; // clear when sound ends naturally
-    athanAudio.play().catch((err) => console.error("Athan play error:", err));
-    sendResponse({ status: "playing" });
+  // create new audio
+  currentAudio = new Audio(browserApi.runtime.getURL(file));
+
+  // Audio is finished playing reset
+  currentAudio.onended = () => { currentAudio = null; };
+
+  // Play the audio and log any error 
+  currentAudio.play().catch((err) => console.error("Audio play error:", err));
+}
+
+// Listens for messages coming from background.js to determine which audio to play
+browserApi.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === "PLAY_ATHAN") playAudio("assets/audio/islam-subhi.m4a");
+  if (msg.type === "PLAY_RING") playAudio("assets/audio/ring.mp3");
+
+  // Stop the athan when the user clicks on the notification
+  if (msg.type === "STOP_AUDIO") {
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   }
-
-  if (msg.type === "PLAY_RING") {
-    if (ringAudio) { ringAudio.pause(); ringAudio.currentTime = 0; }
-    ringAudio = new Audio(browserApi.runtime.getURL("assets/audio/ring.mp3"));
-    ringAudio.onended = () => { ringAudio = null; };
-    ringAudio.play().catch((err) => console.error("Ring play error:", err));
-    sendResponse({ status: "playing" });
-  }
-
-  if (msg.type === "STOP_ATHAN") {
-    if (athanAudio) { athanAudio.pause(); athanAudio.currentTime = 0; athanAudio = null; }
-    sendResponse({ status: "stopped" });
-  }
-
-  return true;
-});
+})

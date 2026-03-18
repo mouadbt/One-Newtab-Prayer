@@ -1,18 +1,6 @@
 const browserApi = typeof chrome !== "undefined" ? chrome : browser;
 const isFirefox = typeof browser !== "undefined";
-
-// Keep a reference to athan audio on firefox so we can stop it
-let firefoxAthan = null;
-
-// Show a browser notification with a given id
-const showNotification = (id, title, message) => {
-  browserApi.notifications.create(id, {
-    type: "basic",
-    title,
-    message,
-    iconUrl: "/assets/images/icon128.png",
-  });
-};
+let currentAudio = null;
 
 // Make sure offscreen doc exists before sending it a message (chrome only)
 const ensureOffscreen = async () => {
@@ -22,43 +10,47 @@ const ensureOffscreen = async () => {
       reasons: ["AUDIO_PLAYBACK"],
       justification: "Play prayer sounds",
     });
-    // small delay so the doc is ready to receive messages
-    await new Promise((r) => setTimeout(r, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
   }
-};
+}
 
-// Play the 5-min reminder ring sound
-const playRing = async () => {
-  if (isFirefox) {
-    const audio = new Audio(browserApi.runtime.getURL("assets/audio/ring.mp3"));
-    audio.play().catch((err) => console.error("Ring error:", err));
-  } else {
+// Show a browser notification with a given id
+const showNotification = (id, title, message) => {
+  browserApi.notifications.create(id, {
+    type: "basic",
+    title,
+    message,
+    iconUrl: "/assets/images/icon128.png",
+  });
+}
+
+// Firefox supports Audio API directly in the background script, no offscreen document needed
+const playSoundOnFirefoxBasedBrwosers = (type) => {
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+  const file = type === "PLAY_ATHAN" ? "assets/audio/islam-subhi.m4a" : "assets/audio/ring.mp3";
+  currentAudio = new Audio(browserApi.runtime.getURL(file));
+  currentAudio.onended = () => { currentAudio = null; };
+  currentAudio.play().catch((err) => console.error("Audio error:", err));
+}
+
+// Play athan or ring sounds
+const playSound = async (type) => {
+  if (!isFirefox) {
     await ensureOffscreen();
-    browserApi.runtime.sendMessage({ type: "PLAY_RING" });
-  }
-};
-
-// Play the athan sound at prayer time
-const playAthan = async () => {
-  if (isFirefox) {
-    if (firefoxAthan) { firefoxAthan.pause(); firefoxAthan.currentTime = 0; }
-    firefoxAthan = new Audio(browserApi.runtime.getURL("assets/audio/islam-subhi.m4a"));
-    firefoxAthan.onended = () => { firefoxAthan = null; }; // stop when sound ends
-    firefoxAthan.play().catch((err) => console.error("Athan error:", err));
+    browserApi.runtime.sendMessage({ type });
   } else {
-    await ensureOffscreen();
-    browserApi.runtime.sendMessage({ type: "PLAY_ATHAN" });
+    playSoundOnFirefoxBasedBrwosers(type);
   }
-};
+}
 
-// Stop athan when prayer notification is closed
-const stopAthan = () => {
+// Stop the athan when the notification is clicked / closed
+const stopSound = () => {
   if (isFirefox) {
-    if (firefoxAthan) { firefoxAthan.pause(); firefoxAthan = null; }
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   } else {
-    browserApi.runtime.sendMessage({ type: "STOP_ATHAN" });
+    browserApi.runtime.sendMessage({ type: "STOP_AUDIO" });
   }
-};
+}
 
 // Clear all existing prayer and reminder alarms before scheduling new ones
 const clearPrayerAlarms = async () => {
@@ -68,58 +60,44 @@ const clearPrayerAlarms = async () => {
       browserApi.alarms.clear(alarm.name);
     }
   }
-};
+}
 
-// Schedule a reminder (5 min before) and a prayer alarm for each prayer
-const schedulePrayerAlarms = async (prayers) => {
-  await clearPrayerAlarms();
-  const now = Date.now();
-
-  for (const { name, timestamp } of prayers) {
-    const reminderTime = timestamp - 5 * 60 * 1000;
-
-    if (reminderTime > now) {
-      browserApi.alarms.create(`reminder:${name}`, { when: reminderTime });
-    }
-    if (timestamp > now) {
-      browserApi.alarms.create(`prayer:${name}`, { when: timestamp });
-    }
-  }
-};
-
-// Rceive alarm schedule requests from the page
-browserApi.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+// Receive alarm schedule requests from the page
+browserApi.runtime.onMessage.addListener(async (msg) => {
   if (msg.type === "SCHEDULE_PRAYER_ALARMS") {
-    schedulePrayerAlarms(msg.payload).then(() => sendResponse({ status: "ok" }));
-    return true; // keep channel open for async response
+    await clearPrayerAlarms();
+    msg.payload.forEach(prayer => {
+      browserApi.alarms.create(`prayer:${prayer.name}`, { when: prayer.timestamp });
+      browserApi.alarms.create(`reminder:${prayer.name}`, { when: prayer.timestamp - 5 * 60 * 1000 });
+    });
   }
-});
+})
 
-// when an alarm fires play the right sound and show a notification
+// When an alarm fires play the right sound and show a notification
 browserApi.alarms.onAlarm.addListener(async (alarm) => {
-  // Check if the alarm time is in the past - if so, skip execution
+
+  // Ignore alarms that are more than 2 minutes late
   // This handles the case where the browser was closed and reopened after the scheduled time
-  if (alarm.when && alarm.when <= Date.now()) {
-    console.log(`Skipping alarm ${alarm.name} - scheduled time has passed (was set for ${new Date(alarm.when).toISOString()})`);
+  const diff = Date.now() - alarm.scheduledTime;
+  if (diff > 2 * 60 * 1000) {
+    console.log(`Skipping stale alarm: ${alarm.name}`);
     return;
   }
 
-  const name = alarm.name.split(":")[1];
+  // Extract prayer name from alarm name e.g. "prayer:Fajr" -> "Fajr"
+  const prayerName = alarm.name.split(":")[1];
 
   if (alarm.name.startsWith("reminder:")) {
-    showNotification(alarm.name, "Prayer Reminder", `${name} in 5 minutes`);
-    playRing();
+    showNotification(alarm.name, "Prayer Reminder", `${prayerName} in 5 minutes`);
+    playSound("PLAY_RING");
   }
 
   if (alarm.name.startsWith("prayer:")) {
-    showNotification(alarm.name, name, `${name} time`);
-    playAthan();
+    showNotification(alarm.name, "Prayer Time", `It's now time for ${prayerName}`);
+    playSound("PLAY_ATHAN");
   }
-});
+})
 
-// only stop athan when the prayer notification is closed, not the reminder
-browserApi.notifications.onClosed.addListener((notifId) => {
-  if (notifId.startsWith("prayer:")) {
-    stopAthan();
-  }
-});
+browserApi.notifications.onClosed.addListener((id) => {
+  if (id.startsWith("prayer:") || id.startsWith("reminder:")) stopSound();
+})
