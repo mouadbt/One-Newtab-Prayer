@@ -61,7 +61,7 @@ const init = async () => {
   }, 500);
 
   // Initialize ayah logic
-  // initAyah();
+  initAyah();
 
 };
 
